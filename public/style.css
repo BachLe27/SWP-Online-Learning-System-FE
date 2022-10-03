@@ -1,0 +1,79 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+* {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+}
+
+body {
+   font-family: 'Montserrat', sans-serif;
+}
+
+.mt-7 {
+   margin-top: 7rem;
+}
+
+.mt-6 {
+   margin-top: 6rem;
+}
+
+.shadow-1 {
+   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+#login {
+   margin-top: 7rem;
+}
+
+.course-item:hover {
+   cursor: pointer;
+   border-radius: 8px;
+   box-shadow: 0.3px 1px rgba(109, 106, 106, 0.5);
+}
+
+#slider {
+   margin-top: 7rem;
+}
+
+#categories {
+   margin-top: 7rem;
+}
+
+.course-author,
+.course-time {
+   font-size: 0.8rem;
+}
+
+#category-main {
+   margin-top: 7rem;
+}
+
+.profile-photo {
+   position: absolute;
+   top: 75%;
+}
+
+.user-info {
+   margin-top: 12rem;
+}
+
+#lesson-main {
+   margin-top: 4rem;
+}
+
+
+.lesson_dropdown_list {
+   height: 100vh;
+   overflow-y: scroll
+}
+
+.chapter span {
+   font-size: 0.8rem;
+}
+
+.lesson-item:hover {
+   background-color: rgba(240, 240, 240, 0.5);
+   cursor: pointer;
+}
