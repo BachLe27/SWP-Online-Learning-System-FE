@@ -1,3 +1,4 @@
+import { Button } from 'react-bootstrap';
 import { Link, useNavigate, usenavigation } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import logo from '../logo.png';
@@ -28,16 +29,17 @@ const Navbar = () => {
 
             <Link className="navbar-brand" to="/">
                <img height="40px" className="" src={logo} alt="" />
-               <span className="px-2 fw-bold">
+               <span className="px-2 fw-bold text-primary">
                   E-Learning
                </span>
             </Link>
 
-            <form className="d-none d-lg-flex col-4" role="search">
-               <input className="form-control me-2" type="search" placeholder="Search courses, posts, ..." />
-               <button className="btn btn-outline-dark" type="submit">
-                  <i className="fas fa-search"></i>
-               </button>
+            <form className="d-none d-lg-flex col-5" role="search">
+
+               <div class="input-group">
+                  <input type="text" class="form-control shadow-none" id="postSearch" placeholder="Search..." />
+                  <Button type="submit" class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></Button>
+               </div>
             </form>
 
             {user == null && pathname != '/login' ?
@@ -58,12 +60,20 @@ const Navbar = () => {
                      </li>
                   }
 
+                  {
+                     user && user.role == "EXPERT" && <>
+                        <Link className="nav-link text-dark" to="/expert">
+                           <i class="fa-solid fa-chalkboard-user"></i> Expert
+                        </Link>
+                     </>
+                  }
+
                   <li className="list-group-numbered">
-                     <Link className="nav-link text-dark" href="courses.html"> <i className="fas fa-book me-1"></i> Courses</Link>
+                     <Link className="nav-link text-dark" to="/courses"> <i className="fas fa-book me-1"></i> Courses</Link>
                   </li>
 
                   <li className="list-group-numbered">
-                     <Link className="nav-link text-dark" href="#"> <i className="fas fa-blog me-1"></i> Blog</Link>
+                     <Link className="nav-link text-dark" to="/blog"> <i className="fas fa-blog me-1"></i> Blog</Link>
                   </li>
 
                   <li className="list-group-numbered d-block d-lg-none">
@@ -72,12 +82,14 @@ const Navbar = () => {
                      </Link>
                   </li>
 
-                  {user && <li className="nav-item">
+
+
+                  {/* {user && <li className="nav-item">
                      <Link className="nav-link text-dark" href="#">
                         <i className="fa-solid fa-bell"></i> Notification
                      </Link>
                   </li>
-                  }
+                  } */}
 
                   {user &&
                      <li className="dropdown">
@@ -85,7 +97,7 @@ const Navbar = () => {
                            aria-expanded="false">
                            <i className="fa-solid fa-user"></i>
                         </span>
-                        <ul className="pt-2 px-2 dropdown-menu dropdown-menu-end shadow" aria-labelledby="userOption">
+                        <ul className="pt-2 px-3 dropdown-menu dropdown-menu-end shadow" aria-labelledby="userOption">
                            <li>
                               <div className="dropdown-header d-flex align-items-center">
                                  <img className="rounded-circle" src="https://picsum.photos/50/50" alt="" />
@@ -96,10 +108,10 @@ const Navbar = () => {
                               <hr className="dropdown-divider" />
                            </li>
                            <li><Link className="dropdown-item" to="/profile">View Profile</Link></li>
-                           <li><Link className="dropdown-item" href="#">Change Password</Link></li>
-                           <li><Link className="dropdown-item" href="#">My courses</Link></li>
-                           <li><Link className="dropdown-item" href="#">My posts</Link></li>
-                           <li><Link className="dropdown-item" href="#">Purchase History</Link></li>
+                           <li><Link className="dropdown-item" to="/changePassword">Change Password</Link></li>
+                           <li><Link className="dropdown-item" to="/myCourse"> My courses</Link></li>
+                           <li><Link className="dropdown-item" to="/myPost">My posts</Link></li>
+                           <li><Link className="dropdown-item" to="/myPurchase">Purchase History</Link></li>
                            <li>
                               <hr className="dropdown-divider" />
                            </li>
@@ -107,7 +119,7 @@ const Navbar = () => {
                               <Link
                                  onClick={logout}
                                  className="dropdown-item"
-                                 href="#">Log out
+                                 href="#"> <i class="fa-solid fa-right-from-bracket"></i> Log out
                               </Link>
                            </li>
                         </ul>
