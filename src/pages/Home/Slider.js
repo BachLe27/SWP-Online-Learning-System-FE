@@ -1,5 +1,14 @@
 import Carousel from 'react-bootstrap/Carousel';
 const Slider = () => {
+
+   const sliderImgStyle = {
+      minHeight: "100%",
+      background: "url('https://picsum.photos/800/300') rgba(255, 0, 150, 0.3)",
+      backgroundSize: "over",
+      backgroundBlendMode: "multiply"
+   }
+
+
    return (
       <Carousel>
          <Carousel.Item>

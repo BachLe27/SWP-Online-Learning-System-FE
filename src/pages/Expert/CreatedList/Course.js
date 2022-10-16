@@ -1,35 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Modal, Button } from 'react-bootstrap'
-
-
-const ConfirmPublicModal = ({ course, ...props }) => {
-   const onSubmit = () => {
-
-   }
-
-   return (
-      <Modal {...props} size="lg">
-         <Modal.Header closeButton>
-            <Modal.Title>Confirmation</Modal.Title>
-         </Modal.Header>
-
-         <Modal.Body>
-            <Form id={`confirmPublic${course.id}`}>
-
-            </Form>
-         </Modal.Body>
-
-         <Modal.Footer>
-            <Button variant="secondary" onClick={props.onHide}>Close</Button>
-            <Button variant="primary" type="submit" form={`confirmPublic${course.id}`} >Add</Button>
-         </Modal.Footer>
-      </Modal >
-   )
-}
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { authAtom } from '../../../_state'
+import expertApi from '../../../_actions/expertApi'
 
 const Course = ({ course, key }) => {
+
    const [modalShow, setModalShow] = useState(false);
+
+   const token = useRecoilValue(authAtom);
+
+   const [updated, setUpdated] = useState(false);
+
+   useEffect(() => {
+   }, [updated]);
+
+   const onSubmit = async (e) => {
+      e.preventDefault();
+      course.is_public = !course.is_public;
+      setUpdated(false);
+      try {
+         const update = await expertApi.updateCourse(token, course.id, course);
+         console.log(update);
+         setUpdated(true);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
 
    return (
       <div>
@@ -61,7 +60,24 @@ const Course = ({ course, key }) => {
             <div className="d-flex align-items-center justify-content-end col-3">
                <Link className='' to={`/expert/course/edit/${course.id}`}>Edit</Link>
                <Button onClick={() => setModalShow(true)} className='mx-2' variant='info'>{course.is_public ? "Hide" : "Public"}</Button>
-               <ConfirmPublicModal course={course} show={modalShow} onHide={() => setModalShow(false)} />
+               {/* <ConfirmPublicModal course={course}  /> */}
+               <Modal show={modalShow} size="md">
+                  <Modal.Header closeButton>
+                     <Modal.Title>Confirmation</Modal.Title>
+                  </Modal.Header>
+
+                  <Modal.Body>
+                     <h5>Do you want {course.is_public ? "hide" : "public"} this course?</h5>
+                     <Form onSubmit={onSubmit} id={`confirmPublic${course.id}`}>
+
+                     </Form>
+                  </Modal.Body>
+
+                  <Modal.Footer>
+                     <Button variant="secondary" onClick={() => setModalShow(false)}>Close</Button>
+                     <Button variant="primary" onClick={() => setModalShow(false)} type="submit" form={`confirmPublic${course.id}`} >{course.is_public ? "Hide" : "Public"}</Button>
+                  </Modal.Footer>
+               </Modal >
                <Button variant='danger'>Delete</Button>
             </div>
          </div>

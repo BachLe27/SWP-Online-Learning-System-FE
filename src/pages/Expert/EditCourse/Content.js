@@ -1,86 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { Accordion, Button } from 'react-bootstrap'
+import { Accordion } from 'react-bootstrap'
 import Chapter from './Chapter';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
 import expertApi from '../../../_actions/expertApi';
 import Loading from '../../../components/Loading';
-import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
-import { authAtom } from '../../../_state';
+import { toastAtom } from '../../../_state';
+import AddChapterModal from './AddChapterModal';
 
-const AddChapterModal = (props) => {
-
-   const token = useRecoilValue(authAtom);
-
-   const onSubmit = async (data) => {
-      console.log(data);
-      try {
-         const id = props.courseId;
-         const addChapter = await expertApi.createChapter(token, id, data);
-         console.log(addChapter);
-
-      } catch (error) {
-         console.log(error);
-      }
-   }
-
-   const {
-      register,
-      handleSubmit,
-      formState: { errors, isSubmitting }
-   } = useForm({
-      mode: 'onSubmit',
-   });
-
-   return (
-      <Modal {...props} size="lg">
-         <Modal.Header closeButton>
-            <Modal.Title>New Chapter</Modal.Title>
-         </Modal.Header>
-
-         <Modal.Body>
-            <Form id="addChapterForm" onSubmit={handleSubmit(onSubmit)}>
-               <Form.Group className="mb-3" controlId="chapterTitle">
-                  <Form.Label>Chapter Title</Form.Label>
-                  <Form.Control
-                     {...register("title", {
-                        require: true
-                     })}
-                     type="text"
-                     placeholder="Enter title"
-                  />
-               </Form.Group>
-
-               <Form.Group className="mb-3" controlId="chapterDescription">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                     {...register("description", {
-                        require: true
-                     })}
-                     as="textarea"
-                     placeholder="Description about chapter..."
-                  />
-               </Form.Group>
-            </Form>
-         </Modal.Body>
-
-         <Modal.Footer>
-            <Button variant="secondary" onClick={props.onHide}>Close</Button>
-            <Button variant="primary" type="submit" form="addChapterForm" >Add</Button>
-         </Modal.Footer>
-      </Modal>
-   )
-}
 
 const Content = ({ course }) => {
+
+   const toast = useRecoilValue(toastAtom);
 
    const loadChapters = async () => {
       try {
          const id = course.id;
-         const chapterDate = await (await expertApi.getCourseChapter(id)).data;
-         setChapters(chapterDate);
-         console.log(chapterDate);
+         const chapterData = await (await expertApi.getCourseChapter(id)).data;
+         chapterData.sort((a, b) => {
+            return (a.created_at < b.created_at) ? -1 : ((a.created_at > b.created_at) ? 1 : 0);
+         });
+         setChapters(chapterData);
+         console.log(chapterData);
       } catch (error) {
          console.log(error);
       }
@@ -90,25 +30,32 @@ const Content = ({ course }) => {
       loadChapters();
    }, [])
 
-   const [modalShow, setModalShow] = useState(false);
+   useEffect(() => {
+      loadChapters();
+   }, [toast]);
+
    const [chapters, setChapters] = useState(null);
 
    return (
       <div className="mt-3 vh-75">
-         <h3 className="text-primary border-bottom">Content</h3>
+         <h3 className="text-primary border-bottom">Chapters</h3>
          <div className="mt-3">
 
             {
                chapters ? <Accordion alwaysOpen>
-                  <Chapter eventKey={1} />
-                  <Chapter eventKey={2} />
+                  {
+                     chapters.length > 0 ?
+                        chapters.map((chapter, index) => {
+                           return <Chapter eventKey={index} chapter={chapter} />
+                        }) : <p>Your course does not have any content.</p>
+                  }
                </Accordion> : <Loading />
             }
 
             <div className="d-flex justify-content-center mt-3">
-               <Button onClick={() => setModalShow(true)}>  <i class="fa-solid fa-plus"></i> Add Chapter</Button>
+               <AddChapterModal courseId={course.id} />
             </div>
-            <AddChapterModal courseId={course.id} show={modalShow} onHide={() => setModalShow(false)} />
+
          </div>
       </div>
    )

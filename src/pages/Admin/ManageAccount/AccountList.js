@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useRecoilState, useRecoilValue } from "recoil";
-import adminApi from "../../_actions/adminApi";
-import { authAtom, usersAtom } from "../../_state";
+import adminApi from "../../../_actions/adminApi";
+import { authAtom, usersAtom } from "../../../_state";
 import Spinner from 'react-bootstrap/Spinner'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';

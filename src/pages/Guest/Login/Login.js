@@ -2,10 +2,10 @@ import { Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from "react";
 
-import Navbar from "../components/Navbar";
-import userAction from "../_actions/userApi";
+import Navbar from "../../../components/Navbar";
+import userAction from "../../../_actions/userApi";
 import { useRecoilState } from "recoil";
-import { authAtom, notiAtom, userAtom } from "../_state";
+import { authAtom, notiAtom, userAtom } from "../../../_state";
 
 
 const Login = () => {
@@ -29,14 +29,14 @@ const Login = () => {
       // console.log(data);
       try {
          const token = await userAction.login(data);
-         setAuth(token.data.access_token);
+         setAuth(token.data);
          localStorage.setItem('auth', JSON.stringify(token.data));
 
          const userInfo = await userAction.authenticate(token.data);
          setUser(userInfo.data);
          localStorage.setItem('user', JSON.stringify(userInfo.data));
 
-         navigate(from, { replace: true });
+         navigate("/");
       } catch (error) {
          console.log(error);
          setErrMsg(error.response.data.detail);
@@ -67,7 +67,7 @@ const Login = () => {
                </div>
             }
 
-            <form onSubmit={handleSubmit(onSubmit)} className="col-6 col-lg-4 d-flex flex-column">
+            <form onSubmit={handleSubmit(onSubmit)} className="col-8 col-lg-4 d-flex flex-column">
                <div className="mb-3">
                   <label for="username" className="form-label">Username</label>
                   <input

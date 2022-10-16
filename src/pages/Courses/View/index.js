@@ -1,10 +1,19 @@
 import React from 'react'
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
+import Navbar from '../../../components/Navbar';
 import CategoryRow from './CategoryRow';
+import Select from 'react-select'
 
 const Courses = () => {
+
+   const options = [
+      { value: 'IT', label: 'IT' },
+      { value: 'Bussiness', label: 'Bussiness' },
+      { value: 'Geometry', label: 'Geometry' },
+      { value: 'Math', label: 'Math' }
+   ]
+
    return (
       <>
          <Navbar />
@@ -32,7 +41,11 @@ const Courses = () => {
                      <Link>Web development</Link>
                      <Link>Business</Link>
                      <Link>Life Style</Link>
-                     <Link>Life Style</Link>
+                     <Link>Math</Link>
+                  </div>
+                  <div className='col-5 mt-5'>
+                     <h4>Sort by categories</h4>
+                     <Select options={options} />
                   </div>
 
                   {/* <div class="mb-5 col-4">
@@ -45,7 +58,6 @@ const Courses = () => {
                      </select>
                   </div> */}
                </div>
-
                <CategoryRow />
                <CategoryRow />
                <CategoryRow />

@@ -1,8 +1,12 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Course = () => {
+
+   const navigate = useNavigate();
+
    return (
-      <div class="course-item col-lg-3 col-md-6 my-4">
+      <div onClick={() => { navigate('/courses/detail') }} class="course-item col-lg-3 col-md-6 my-4">
          <div class="w-100">
             <img
                class="rounded-3 border border-dark"

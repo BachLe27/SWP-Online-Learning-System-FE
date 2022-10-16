@@ -73,6 +73,15 @@ const userApi = {
       }
       return axios(config);
    },
+
+   getAvatar(token) {
+      const config = {
+         method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: '/user/me/avatar',
+      }
+      return axios(config);
+   }
 }
 
 export default userApi;

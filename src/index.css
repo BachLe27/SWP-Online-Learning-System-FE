@@ -7,6 +7,12 @@
    padding: 0;
 }
 
+#course-detail-heading {
+   margin-top: 4rem;
+   background-color: #2f697e;
+   height: 250px;
+}
+
 body {
    font-family: 'Montserrat', sans-serif;
 }

@@ -65,6 +65,36 @@ const expertApi = {
          url: `/course/${id}/chapter`
       }
       return axios(config);
+   },
+
+   updateCourse(token, id, data) {
+
+      const config = {
+         method: 'PUT',
+         data: JSON.stringify(data),
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         url: `/course/${id}`
+      }
+      return axios(config);
+   },
+
+   createLesson(token, id, data) {
+      console.log(data);
+      const config = {
+         method: 'POST',
+         data: JSON.stringify(data),
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         url: `/chapter/${id}/lesson`
+      }
+      return axios(config);
+   },
+
+   getLesson(id) {
+      const config = {
+         method: 'GET',
+         url: `/chapter/${id}/lesson`
+      }
+      return axios(config);
    }
 }
 

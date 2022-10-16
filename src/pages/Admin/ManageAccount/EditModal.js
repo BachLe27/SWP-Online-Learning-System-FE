@@ -2,8 +2,8 @@
 import Form from 'react-bootstrap/Form'
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { authAtom, reloadAtom, toastAtom } from '../../_state';
-import adminApi from '../../_actions/adminApi';
+import { authAtom, reloadAtom, toastAtom } from '../../../_state';
+import adminApi from '../../../_actions/adminApi';
 
 const EditModal = ({ user }) => {
 

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import expertApi from '../../../_actions/expertApi';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authAtom, toastAtom } from '../../../_state';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const NewCourse = () => {
@@ -15,7 +15,6 @@ const NewCourse = () => {
    const setToast = useSetRecoilState(toastAtom);
 
    const navigate = useNavigate();
-   const location = useLocation();
 
    const {
       register,

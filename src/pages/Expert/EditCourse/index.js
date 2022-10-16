@@ -34,7 +34,7 @@ const EditCourse = () => {
 
    useEffect(() => {
       loadCourse();
-   })
+   }, [])
 
    return (
       <>

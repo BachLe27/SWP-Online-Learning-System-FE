@@ -4,9 +4,9 @@ import { Link, Navigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import validator from 'validator'
 
-import Navbar from "../../components/Navbar";
-import userAction from '../../_actions/userApi';
-import { authAtom } from '../../_state';
+import Navbar from "../../../components/Navbar";
+import userAction from '../../../_actions/userApi';
+import { authAtom } from '../../../_state';
 
 
 const Register = () => {
@@ -30,6 +30,7 @@ const Register = () => {
       data.phone = '';
       data.address = '';
       data.bio = '';
+      data.avatar = '';
 
       setSuccess(false);
       try {

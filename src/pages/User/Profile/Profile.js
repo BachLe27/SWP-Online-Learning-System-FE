@@ -35,10 +35,7 @@ const Profile = () => {
    const [user, setUser] = useRecoilState(userAtom);
    const [success, setSuccess] = useState(false);
 
-   const [avatarImage, setAvatarImage] = useState({
-      imgSrc: `http://localhost:8000/user/${user.id}/avatar`,
-      imgHash: Date.now()
-   });
+   const [avatarImage, setAvatarImage] = useState();
 
    const handleClose = () => setShow(false);
    const handleShow = () => setShow(true);
@@ -49,11 +46,13 @@ const Profile = () => {
          if (data.avatar.length > 0) {
             const avatar = await userApi.updateAvatar(token, data.avatar[0]);
             delete data.avatar;
+
             setAvatarImage({
                imgSrc: `http://localhost:8000/user/${user.id}/avatar`,
                imgHash: Date.now()
             });
          }
+
          const change = await userApi.changeInfo(data, token);
          const newInfo = await userApi.authenticate(token);
          setUser(newInfo.data);
@@ -73,11 +72,36 @@ const Profile = () => {
       }
    }
 
+
+   const loadAvatar = async () => {
+
+      try {
+         const avatarData = await userApi.getAvatar(token);
+         console.log(avatarData);
+
+         if (avatarData.data) {
+            setAvatarImage({
+               imgSrc: `http://localhost:8000/user/${user.id}/avatar`,
+               imgHash: Date.now()
+            });
+         } else {
+            setAvatarImage({
+               imgSrc: `https://picsum.photos/500/500`,
+               imgHash: Date.now()
+            });
+         }
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
    useEffect(() => {
       if (!token) {
          setToken(authAtom);
       }
+      loadAvatar();
    }, [])
+
 
    useEffect(() => {
    }, [success, avatarImage])
@@ -91,7 +115,7 @@ const Profile = () => {
                <div style={profileStyle}>
                </div>
                <div class="profile-photo w-100 d-flex flex-column align-items-center">
-                  <img class="rounded-circle border border-dark border-3 img-fluid" height="150px" width="150px" src={`${avatarImage.imgSrc}?${avatarImage.imgHash}`} alt="" />
+                  {avatarImage && <img class="rounded-circle border border-dark border-3 img-fluid" height="150px" width="150px" src={`${avatarImage.imgSrc}?${avatarImage.imgHash}`} alt="" />}
                   <p class="fs-3 fw-bold pt-3 mb-0 border-bottom border-2 border-dark">
                      {user.full_name}
                   </p>

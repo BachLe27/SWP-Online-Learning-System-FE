@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
-import ListAccount from "./ListAccount";
+import ListAccount from "./ManageAccount/ListAccount";
 
 const Admin = () => {
 

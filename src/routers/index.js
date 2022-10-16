@@ -5,16 +5,17 @@ import CreateCourse from '../pages/Expert/CreateCourse';
 import EditCourse from '../pages/Expert/EditCourse';
 import Expert from '../pages/Expert/Expert';
 import Feedback from '../pages/Expert/Feedback';
-import MyCourse from '../pages/Expert/CourseList';
+import MyCourse from '../pages/Expert/CreatedList';
 import Question from '../pages/Expert/Question';
 import Home from '../pages/Home/Home'
-import Login from '../pages/Login/Login';
+import Login from '../pages/Guest/Login/Login';
 import Profile from '../pages/User/Profile/Profile';
-import Register from '../pages/Register/Register';
+import Register from '../pages/Guest/Register/Register';
 import Unauthorized from '../pages/Error/Unauthorized';
 import ChangePassword from '../pages/User/ChangePassword/ChangePassword';
-import Courses from '../pages/Courses';
+import Courses from '../pages/Courses/View';
 import CreatePost from '../pages/Blog/CreatePost';
+import CourseDetail from '../pages/Courses/View/CourseDetail';
 
 const publicRoutes = [
    { path: '/', component: Home },
@@ -22,7 +23,8 @@ const publicRoutes = [
    { path: '/register', component: Register },
    { path: '/unauthorized', component: Unauthorized },
    { path: '/blog', component: Blog },
-   { path: '/courses', component: Courses }
+   { path: '/courses', component: Courses },
+   { path: '/courses/detail', component: CourseDetail }
 ]
 
 const adminRoutes = [

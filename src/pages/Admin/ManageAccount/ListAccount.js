@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useRecoilState } from "recoil";
-import adminApi from "../../_actions/adminApi";
-import { authAtom, reloadAtom } from "../../_state";
-import Spinner from 'react-bootstrap/Spinner'
+import adminApi from "../../../_actions/adminApi";
+import { authAtom, reloadAtom } from "../../../_state";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination'
 import EditModal from "./EditModal";
-import ToastNoti from "../../components/ToastNoti";
-import Loading from "../../components/Loading";
+import ToastNoti from "../../../components/ToastNoti";
+import Loading from "../../../components/Loading";
 
 const ListAccount = () => {
 
