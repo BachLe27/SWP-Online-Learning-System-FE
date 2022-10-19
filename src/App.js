@@ -1,6 +1,6 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
-import { privateRoutes, publicRoutes, adminRoutes, expertRoutes } from "./routers/index"
+import { privateRoutes, publicRoutes, adminRoutes, expertRoutes, staffRoutes } from "./routers/index"
 import PrivateRoute from "./components/PrivateRoute";
 import NotFound from "./pages/Error/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -37,6 +37,15 @@ function App() {
         <Route element={<PrivateRoute allowedRoles={["EXPERT"]} />}>
           {
             expertRoutes.map((route) => {
+              return <Route path={route.path} element={<route.component />} />
+            })
+          }
+        </Route>
+
+
+        <Route element={<PrivateRoute allowedRoles={["STAFF"]} />}>
+          {
+            staffRoutes.map((route) => {
               return <Route path={route.path} element={<route.component />} />
             })
           }

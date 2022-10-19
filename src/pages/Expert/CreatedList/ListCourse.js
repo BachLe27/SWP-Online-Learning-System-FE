@@ -53,7 +53,7 @@ const ListCourse = ({ page }) => {
                         courses ? courses.length > 0 ?
                            courses.map((course, index) => {
                               return <Course course={course} key={course.id} />
-                           }) : <p>Empty. <Link to="/expert/create">Create courses</Link></p>
+                           }) : <p>Empty. <Link to="/expert/create">Create new course</Link></p>
                            : <></>
                      }
                   </div>

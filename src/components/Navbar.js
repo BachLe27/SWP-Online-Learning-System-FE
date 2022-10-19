@@ -68,6 +68,14 @@ const Navbar = () => {
                      </>
                   }
 
+                  {
+                     user && user.role == "STAFF" && <>
+                        <Link className="nav-link text-dark" to="/staff">
+                           <i class="fa-solid fa-user-tie"></i> Staff
+                        </Link>
+                     </>
+                  }
+
                   <li className="list-group-numbered">
                      <Link className="nav-link text-dark" to="/courses"> <i className="fas fa-book me-1"></i> Courses</Link>
                   </li>

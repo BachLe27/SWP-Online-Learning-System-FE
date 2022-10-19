@@ -20,7 +20,6 @@ const expertApi = {
       if (offset != 0)
          query += `&offset=${offset}`
 
-      console.log(query);
       const config = {
          method: 'GET',
          headers: { 'Authorization': `${token.token_type} ${token.access_token}` },

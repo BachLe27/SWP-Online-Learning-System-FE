@@ -47,6 +47,7 @@ const EditModal = ({ user }) => {
                      <Form.Select {...register("role")} aria-label="Default select example">
                         <option selected={user.role === "ADMIN"} value="ADMIN">Admin</option>
                         <option selected={user.role === "EXPERT"} value="EXPERT">Expert</option>
+                        <option selected={user.role === "STAFF"} value="STAFF">Staff</option>
                         <option selected={user.role === "USER"} value="USER">User</option>
                      </Form.Select>
                   </Form>

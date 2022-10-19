@@ -16,6 +16,8 @@ import ChangePassword from '../pages/User/ChangePassword/ChangePassword';
 import Courses from '../pages/Courses/View';
 import CreatePost from '../pages/Blog/CreatePost';
 import CourseDetail from '../pages/Courses/View/CourseDetail';
+import Staff from '../pages/Staff';
+import Categories from '../pages/Staff/Categories';
 
 const publicRoutes = [
    { path: '/', component: Home },
@@ -41,6 +43,10 @@ const expertRoutes = [
 
 ]
 
+const staffRoutes = [
+   { path: '/staff', component: Staff },
+   { path: '/staff/categories', component: Categories }
+]
 
 const privateRoutes = [
    { path: '/profile', component: Profile },
@@ -50,4 +56,4 @@ const privateRoutes = [
 
 
 
-export { publicRoutes, privateRoutes, adminRoutes, expertRoutes };
+export { publicRoutes, privateRoutes, adminRoutes, expertRoutes, staffRoutes };

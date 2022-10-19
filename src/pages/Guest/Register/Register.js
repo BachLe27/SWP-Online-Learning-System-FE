@@ -31,7 +31,7 @@ const Register = () => {
       data.address = '';
       data.bio = '';
       data.avatar = '';
-
+      setErrMsg('');
       setSuccess(false);
       try {
          const response = await userAction.register(data);

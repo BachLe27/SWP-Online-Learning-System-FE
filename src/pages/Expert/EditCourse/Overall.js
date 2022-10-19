@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import Select from 'react-select';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import ToastNoti from '../../../components/ToastNoti';
 import expertApi from '../../../_actions/expertApi';
-import { authAtom, toastAtom } from '../../../_state';
+import userApi from '../../../_actions/userApi';
+import { authAtom, categoriesAtom, toastAtom } from '../../../_state';
 
 
 const Overall = ({ course }) => {
@@ -14,19 +16,44 @@ const Overall = ({ course }) => {
    const token = useRecoilValue(authAtom);
    const [toast, setToast] = useRecoilState(toastAtom);
 
-   useEffect(() => {
+   const [categories, setCategories] = useRecoilState(categoriesAtom);
 
-   }, [toast])
+   const loadCategories = async () => {
+      try {
+         let categoriesData = await (await userApi.getCategories()).data;
+
+         categoriesData = await categoriesData.map(({ id, name }) => ({
+            label: name,
+            value: id
+         }))
+
+         setCategories(categoriesData);
+
+      } catch (error) {
+         console.log(error);
+      }
+   }
 
    const {
       register,
       handleSubmit,
+      control,
       formState: { errors, isSubmitting }
    } = useForm({
       mode: 'onSubmit',
    });
 
+   useEffect(() => {
+      loadCategories();
+   }, []);
+
+   useEffect(() => {
+
+   }, [toast])
+
    const onSubmit = async (data) => {
+
+      console.log(data);
       try {
          const updateCourse = await expertApi.updateCourse(token, course.id, data);
          setToast({
@@ -38,7 +65,6 @@ const Overall = ({ course }) => {
          console.log(error);
       }
    }
-
 
    return (
       <div>
@@ -55,13 +81,21 @@ const Overall = ({ course }) => {
                   defaultValue={course.title}
                />
             </Form.Group>
+
             <Form.Group className="mb-3" controlId="courseCategory">
                <Form.Label className="fw-semibold">Category</Form.Label>
-               <Form.Select aria-label="Default select example">
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                  <option value="3">Three</option>
+               <Form.Select {...register("category_id", {
+                  required: true
+               })}>
+                  {
+                     categories &&
+                     categories.map((category, index) => {
+                        return <option
+                           selected={category.value == course.category_id}
+                           value={category.value}
+                        >{category.label}</option>
+                     })
+                  }
                </Form.Select>
             </Form.Group>
 
@@ -96,9 +130,6 @@ const Overall = ({ course }) => {
             <Form.Group className="mb-3" controlId="courseImg">
                <Form.Label className="fw-semibold">Thumbnail Image (URL)</Form.Label>
                <Form.Control
-                  {...register("image", {
-                     required: true
-                  })}
                   isInvalid={errors.image}
                   type="url"
                   placeholder="URL to thumbnail image..."

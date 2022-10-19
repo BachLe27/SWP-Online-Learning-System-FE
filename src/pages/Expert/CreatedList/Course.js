@@ -4,14 +4,37 @@ import { Form, Modal, Button } from 'react-bootstrap'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { authAtom } from '../../../_state'
 import expertApi from '../../../_actions/expertApi'
+import userApi from '../../../_actions/userApi'
 
 const Course = ({ course, key }) => {
 
    const [modalShow, setModalShow] = useState(false);
-
    const token = useRecoilValue(authAtom);
-
    const [updated, setUpdated] = useState(false);
+
+   const [categories, setCategories] = useState();
+
+   const [mapping, setMapping] = useState();
+
+   const loadCategories = async () => {
+      try {
+         const categoriesData = await (await userApi.getCategories()).data;
+         setCategories(categoriesData);
+
+         const map = new Map();
+         categoriesData.forEach(element => {
+            map.set(element.id, element.name);
+         });
+         setMapping(map);
+
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   useEffect(() => {
+      loadCategories();
+   }, [])
 
    useEffect(() => {
    }, [updated]);
@@ -40,20 +63,13 @@ const Course = ({ course, key }) => {
                </div>
 
                <div className="ms-3">
-                  <h4 className='fw-bold'>{course.title}</h4>
+                  <h4 className='fw-bold text-primary'>{course.title}</h4>
                   <p>{course.description.substring(0, 200) + '...'}</p>
                   <p className='m-1'> <span>0 chapter(s)</span> · <span>{course.level}</span> ·  <span>{course.is_public ? "Published" : "Private"}</span></p>
-                  {/* <p className='m-1'> <span className='fw-semibold'>10 students</span></p>
-                  <p className='m-1'> <span className='fw-semibold'>Rate: 4.3 </span>
-                     <i class="fa-regular fa-star"></i>
-                     <i class="fa-regular fa-star"></i>
-                     <i class="fa-regular fa-star"></i>
-                     <i class="fa-regular fa-star"></i>
-                     <i class="fa-regular fa-star"></i>
-                     <span> (100)</span>
-                  </p> */}
                   <p className='m-1'> <span className='fw-semibold'>Create at:</span> {course.created_at.substring(0, 10)}</p>
-                  <p className='m-1'> <span className='fw-semibold'>Category:</span>  IT, Bussiness</p>
+                  <p className='m-1'>
+                     <span className='fw-semibold'>Category:</span> {mapping && mapping.get(course.category_id)}
+                  </p>
                </div>
             </div>
 

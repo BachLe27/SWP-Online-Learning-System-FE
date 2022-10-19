@@ -49,68 +49,68 @@ const Login = () => {
 
    if (auth) {
       return <Navigate to="/" />
-   }
+   } else
 
-   return (
-      <>
-         <Navbar />
-         <div id="login" className="container d-flex justify-content-lg-center flex-column align-items-center">
-            <div className="mb-4">
-               <h2 className="fw-bold">Login to G6</h2>
+      return (
+         <>
+            <Navbar />
+            <div id="login" className="container d-flex justify-content-lg-center flex-column align-items-center">
+               <div className="mb-4">
+                  <h2 className="fw-bold">Login to G6</h2>
+               </div>
+
+               {
+                  errMsg &&
+                  <div class="alert alert-danger fw-bold col-5 text-center alert-dismissible fade show" role="alert">
+                     {errMsg}
+                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+               }
+
+               <form onSubmit={handleSubmit(onSubmit)} className="col-8 col-lg-4 d-flex flex-column">
+                  <div className="mb-3">
+                     <label for="username" className="form-label">Username</label>
+                     <input
+                        type="text"
+                        className={`form-control ${errors.username ? "is-invalid" : ""}`}
+                        {...register("username", {
+                           required: true,
+                           onChange: (e) => { setErrMsg('') }
+                        })}
+                        id="username"
+                     />
+                     <div class="invalid-feedback">
+                        Username is required
+                     </div>
+                  </div>
+
+                  <div className="mb-3">
+                     <label for="password" className="form-label">Password</label>
+                     <input
+                        type="password"
+                        className={`form-control ${errors.password ? "is-invalid" : ""}`}
+                        {...register("password", {
+                           required: true,
+                           onChange: (e) => { setErrMsg('') }
+                        })}
+                        id="password"
+                     />
+                     <div class="invalid-feedback">
+                        Password is required
+                     </div>
+                  </div>
+
+                  <button type="submit" className="btn btn-primary">
+                     {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                     </div>} Login
+                  </button>
+                  <p className="text-center mt-2">Don't have an account? <Link to="/register">Sign up</Link></p>
+                  <p className="text-center"> <a href="forgot.html">Forgot password?</a> </p>
+               </form>
             </div>
-
-            {
-               errMsg &&
-               <div class="alert alert-danger fw-bold col-5 text-center alert-dismissible fade show" role="alert">
-                  {errMsg}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-               </div>
-            }
-
-            <form onSubmit={handleSubmit(onSubmit)} className="col-8 col-lg-4 d-flex flex-column">
-               <div className="mb-3">
-                  <label for="username" className="form-label">Username</label>
-                  <input
-                     type="text"
-                     className={`form-control ${errors.username ? "is-invalid" : ""}`}
-                     {...register("username", {
-                        required: true,
-                        onChange: (e) => { setErrMsg('') }
-                     })}
-                     id="username"
-                  />
-                  <div class="invalid-feedback">
-                     Username is required
-                  </div>
-               </div>
-
-               <div className="mb-3">
-                  <label for="password" className="form-label">Password</label>
-                  <input
-                     type="password"
-                     className={`form-control ${errors.password ? "is-invalid" : ""}`}
-                     {...register("password", {
-                        required: true,
-                        onChange: (e) => { setErrMsg('') }
-                     })}
-                     id="password"
-                  />
-                  <div class="invalid-feedback">
-                     Password is required
-                  </div>
-               </div>
-
-               <button type="submit" className="btn btn-primary">
-                  {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
-                     <span class="visually-hidden">Loading...</span>
-                  </div>} Login
-               </button>
-               <p className="text-center mt-2">Don't have an account? <Link to="/register">Sign up</Link></p>
-               <p className="text-center"> <a href="forgot.html">Forgot password?</a> </p>
-            </form>
-         </div>
-      </>
-   );
+         </>
+      );
 }
 
 export default Login;

@@ -11,7 +11,7 @@ const PrivateRoute = ({ allowedRoles }) => {
    if (auth) {
       if (allowedRoles.includes(user.role))
          return <Outlet />
-      else return <Navigate to="/unauthorized" state={{ from: location }} />
+      else return <Navigate to="/unauthorized" replace />
    } else {
       return <Navigate to="/login" state={{ from: location }} replace />
    }

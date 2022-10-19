@@ -81,7 +81,29 @@ const userApi = {
          url: '/user/me/avatar',
       }
       return axios(config);
+   },
+
+   getCategories() {
+      const config = {
+         method: 'GET',
+         url: '/category',
+      }
+      return axios(config);
+   },
+
+   upload(token, data) {
+      var formData = new FormData();
+      formData.append("file", data);
+
+      const config = {
+         method: 'POST',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'multipart/form-data' },
+         data: formData,
+         url: '/upload'
+      }
+      return axios(config);
    }
+
 }
 
 export default userApi;

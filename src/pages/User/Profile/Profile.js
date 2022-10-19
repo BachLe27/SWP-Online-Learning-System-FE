@@ -77,21 +77,17 @@ const Profile = () => {
 
       try {
          const avatarData = await userApi.getAvatar(token);
-         console.log(avatarData);
+         setAvatarImage({
+            imgSrc: `http://localhost:8000/user/${user.id}/avatar`,
+            imgHash: Date.now()
+         });
 
-         if (avatarData.data) {
-            setAvatarImage({
-               imgSrc: `http://localhost:8000/user/${user.id}/avatar`,
-               imgHash: Date.now()
-            });
-         } else {
-            setAvatarImage({
-               imgSrc: `https://picsum.photos/500/500`,
-               imgHash: Date.now()
-            });
-         }
       } catch (error) {
          console.log(error);
+         setAvatarImage({
+            imgSrc: `https://picsum.photos/500/500`,
+            imgHash: Date.now()
+         });
       }
    }
 

@@ -1,38 +1,87 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import expertApi from '../../../_actions/expertApi';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authAtom, toastAtom } from '../../../_state';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { authAtom, categoriesAtom, toastAtom } from '../../../_state';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import userApi from '../../../_actions/userApi';
+import Select from 'react-select'
 
 const NewCourse = () => {
+
    const [validated, setValidated] = useState(false);
-
+   const [categories, setCategories] = useRecoilState(categoriesAtom);
    const token = useRecoilValue(authAtom);
-
+   const [img, setImg] = useState();
    const setToast = useSetRecoilState(toastAtom);
-
    const navigate = useNavigate();
 
    const {
       register,
       handleSubmit,
-      formState: { errors, isSubmitting }
+      formState: { errors, isSubmitting },
+      control
    } = useForm({
       mode: 'onSubmit',
    });
 
+   const loadCategories = async () => {
+      try {
+         let categoriesData = await (await userApi.getCategories()).data;
+
+         categoriesData = categoriesData.map(({ id, name }) => ({
+            label: name,
+            value: id
+         }))
+
+         setCategories(categoriesData);
+         //console.log(categoriesData);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   useEffect(() => {
+      loadCategories();
+   }, []);
+
+   useEffect(() => {
+
+   }, [img]);
+
    const onSubmit = async (data) => {
       data.is_public = false;
-      console.log(token);
+      data.category_id = data.categories.value;
+      delete data.categories;
+      //console.log(data);
       try {
+
          const createCourse = await expertApi.createCourse(token, data);
-         console.log(createCourse);
+         //console.log(createCourse);
          setValidated(true);
          const id = createCourse.data.detail;
+         setToast({
+            show: true,
+            status: 'primary',
+            msg: 'Create Course Success'
+         })
          navigate(`/expert/course/edit/${id}`);
+
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   const handleUploadImage = async (e) => {
+      console.log(e.target.files[0]);
+
+      try {
+         const image = e.target.files[0];
+         const uploadId = await (await userApi.upload(token, image)).data.detail;
+         console.log(uploadId);
+         setImg(uploadId);
       } catch (error) {
          console.log(error);
       }
@@ -52,16 +101,27 @@ const NewCourse = () => {
                   isInvalid={errors.title}
                   type="text" placeholder="Enter title"
                />
+               <Form.Control.Feedback type="invalid">
+                  Course title is required
+               </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="courseCategory">
                <Form.Label className="fw-semibold">Category</Form.Label>
-               <Form.Select aria-label="Default select example">
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                  <option value="3">Three</option>
-               </Form.Select>
+               <Controller
+                  control={control}
+                  name="categories"
+                  render={({ field: { onChange, onBlur, value, ref } }) => (
+                     <Select
+                        options={categories}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        inputRef={ref}
+                        selected={value}
+                     />
+                  )}
+               />
+
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="courseLevel">
@@ -78,6 +138,9 @@ const NewCourse = () => {
                   <option value="INTERMEDIATE">Intermediate</option>
                   <option value="ADVANCED">Advanced</option>
                </Form.Select>
+               <Form.Control.Feedback type="invalid">
+                  Course level is required
+               </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="courseDescription">
@@ -89,6 +152,9 @@ const NewCourse = () => {
                   isInvalid={errors.description}
                   as="textarea" placeholder="Enter description for your course..."
                />
+               <Form.Control.Feedback type="invalid">
+                  Course description is required
+               </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="courseImg">
@@ -97,10 +163,18 @@ const NewCourse = () => {
                   {...register("image", {
                      required: true
                   })}
-                  isInvalid={errors.image}
-                  type="url" placeholder="URL to thumbnail image..."
+                  onChange={handleUploadImage}
+                  type="file"
+                  accept=".jpg, .png, .jpeg"
                />
             </Form.Group>
+            <Form.Label className="fw-semibold">Preview Image:</Form.Label>
+            {
+               img && <>
+                  <img width="200px" height="200px" className='border' src={`http://localhost:8000/upload/${img}`} alt="" />
+               </>
+            }
+
 
             <Button className='rounded-0 w-25 px-3 py-2 fw-semibold align-self-center mb-4 mt-3' variant="primary" type="submit">
                {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
@@ -108,7 +182,7 @@ const NewCourse = () => {
                </div>} Create Course
             </Button>
          </Form>
-      </div>
+      </div >
    );
 }
 

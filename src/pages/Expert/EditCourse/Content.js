@@ -20,7 +20,7 @@ const Content = ({ course }) => {
             return (a.created_at < b.created_at) ? -1 : ((a.created_at > b.created_at) ? 1 : 0);
          });
          setChapters(chapterData);
-         console.log(chapterData);
+         // console.log(chapterData);
       } catch (error) {
          console.log(error);
       }

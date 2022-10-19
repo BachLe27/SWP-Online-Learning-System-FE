@@ -3,6 +3,7 @@ import { Tab, Tabs } from "react-bootstrap";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import ListAccount from "./ManageAccount/ListAccount";
+import Categories from "./ManageCategories";
 
 const Admin = () => {
 
@@ -22,11 +23,11 @@ const Admin = () => {
                <Tab className="vh-75" eventKey="home" title={<span><i class="fa-solid fa-users-gear"></i> Manage Account</span>}>
                   <ListAccount />
                </Tab>
-               <Tab className="vh-75" eventKey="profile" title="@@">
-                  Tab 1 content
+               <Tab className="vh-75" eventKey="contact" title="Categories">
+                  <Categories />
                </Tab>
-               <Tab className="vh-75" eventKey="contact" title="Contact">
-                  ????
+               <Tab className="vh-75" eventKey="profile" title="Courses">
+                  Courses
                </Tab>
             </Tabs>
          </div >

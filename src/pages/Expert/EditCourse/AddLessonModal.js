@@ -59,7 +59,7 @@ const AddLessonModal = ({ chapterId }) => {
       formState: { errors, isSubmitting },
       reset
    } = useForm({
-      mode: 'onTouch',
+      mode: 'onSubmit',
    });
 
    const onHide = () => {
@@ -80,7 +80,7 @@ const AddLessonModal = ({ chapterId }) => {
                      <Form.Label className="fw-semibold">Lesson Title</Form.Label>
                      <Form.Control
                         {...register("title", {
-                           require: true
+                           required: true
                         })}
                         type="text"
                         placeholder="Enter title"
@@ -92,13 +92,13 @@ const AddLessonModal = ({ chapterId }) => {
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="lessonTitle">
-                     <Form.Label className="fw-semibold">Lesson Duration (mins)</Form.Label>
+                     <Form.Label className="fw-semibold">Lesson Duration (minutes)</Form.Label>
                      <Form.Control
                         {...register("duration", {
-                           require: true
+                           required: true
                         })}
                         type="number"
-                        placeholder="Enter duration time (minutes)"
+                        placeholder="Enter duration time"
                         className={`${errors.duration ? "is-invalid" : ""}`}
                      />
                      <Form.Control.Feedback type="invalid">
@@ -110,7 +110,7 @@ const AddLessonModal = ({ chapterId }) => {
                      <Form.Label className="fw-semibold">Description</Form.Label>
                      <Form.Control
                         {...register("description", {
-                           require: true
+                           required: true
                         })}
                         as="textarea"
                         placeholder="Description about chapter..."
