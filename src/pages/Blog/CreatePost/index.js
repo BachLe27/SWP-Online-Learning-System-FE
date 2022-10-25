@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../../../components/Navbar'
 import MarkdownIt from 'markdown-it';
 import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Button, Form, FormGroup, FormLabel } from 'react-bootstrap';
 import Footer from '../../../components/Footer';
+import { useForm } from 'react-hook-form';
 
 
 const CreatePost = () => {
 
-
    const mdParser = new MarkdownIt(/* Markdown-it options */);
-
+   const [content, setContent] = useState('');
    // function onImageUpload(file) {
    //    return new Promise(resolve => {
    //       const reader = new FileReader();
@@ -20,11 +20,29 @@ const CreatePost = () => {
    //       };
    //       reader.readAsDataURL(file);
    //    });
-   // }
+   // }  
+
+   const onSubmit = async (data) => {
+      data.content = content;
+      try {
+         console.log(data);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   const {
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+      reset
+   } = useForm({
+      mode: 'onTouch',
+   });
 
    // Finish!
    function handleEditorChange({ html, text }) {
-      console.log(html, text);
+      setContent(text);
    }
 
    return (
@@ -36,25 +54,40 @@ const CreatePost = () => {
 
             </div>
 
-            <Form className='mb-3'>
+            <Form className='mb-3' onSubmit={handleSubmit(onSubmit)}>
                <Form.Group className="">
                   <Form.Label className="fw-bold">Title:</Form.Label>
-                  <Form.Control placeholder='Title for your post...' className='border-none shadow-none'></Form.Control>
+                  <Form.Control
+                     {...register("title", {
+                        required: true
+                     })}
+                     placeholder='Title for your post...'
+                     className='border-none shadow-none'
+                     isInvalid={errors.title}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                     Title is required
+                  </Form.Control.Feedback>
                </Form.Group>
+               <p className="fw-bold my-2">Content:</p>
+               <MdEditor
+                  style={{ height: '500px' }}
+                  renderHTML={text => mdParser.render(text)}
+                  onChange={handleEditorChange}
+                  canView={{ fullScreen: false, hideMenu: true }}
+                  placeholder="Write your content..."
+               // onImageUpload={onImageUpload}
+               />
+               <div className="my-4 d-flex justify-content-end">
+                  <Button type="submit">
+                     {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                     </div>} Publish
+                  </Button>
+               </div>
             </Form>
-            <p className="fw-bold my-2">Content:</p>
-            <MdEditor
-               style={{ height: '500px' }}
-               renderHTML={text => mdParser.render(text)}
-               onChange={handleEditorChange}
-               canView={{ fullScreen: false, hideMenu: true }}
-               placeholder="Write your content..."
-            // onImageUpload={onImageUpload}
-            />
-            <div className="my-4 d-flex justify-content-end">
-               <Button>Publish</Button>
-            </div>
-         </div>
+
+         </div >
          <Footer />
       </>
    )

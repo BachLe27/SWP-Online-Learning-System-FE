@@ -102,6 +102,82 @@ const userApi = {
          url: '/upload'
       }
       return axios(config);
+   },
+
+   getAllCourses() {
+      const config = {
+         method: 'GET',
+         url: '/course'
+      }
+      return axios(config);
+   },
+
+   getCourseDetail(id) {
+      const config = {
+         method: 'GET',
+         url: `/course/${id}`
+      }
+      return axios(config);
+   },
+
+   getCourseOverView(id) {
+      const config = {
+         method: 'GET',
+         url: `/course/${id}/overview`
+      }
+      return axios(config);
+   },
+
+   getChapters(id) {
+      const config = {
+         method: 'GET',
+         url: `/course/${id}/chapter`
+      }
+      return axios(config);
+   },
+
+   getChapterData(id) {
+      const config = {
+         method: 'GET',
+         url: `/chapter/${id}`
+      }
+      return axios(config);
+   },
+
+   getLesson(id) {
+      const config = {
+         method: 'GET',
+         url: `/lesson/${id}`
+      }
+      return axios(config);
+   },
+
+   searchCourse(keyword) {
+      const limit = 5;
+      const config = {
+         method: 'GET',
+         url: `/course?search=${keyword}&limit=${limit}`
+      }
+      return axios(config);
+   },
+
+   enrollCourse(token, courseId) {
+      console.log(courseId);
+      const config = {
+         method: 'POST',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/course/${courseId}/enroll`
+      }
+      return axios(config);
+   },
+
+   getEnrolledCourse(token) {
+      const config = {
+         method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/course/enrolled`
+      }
+      return axios(config);
    }
 
 }

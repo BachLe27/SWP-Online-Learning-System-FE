@@ -6,7 +6,7 @@ import Footer from '../../../components/Footer';
 import Navbar from '../../../components/Navbar';
 import ToastNoti from '../../../components/ToastNoti';
 import expertApi from '../../../_actions/expertApi';
-import { authAtom } from '../../../_state';
+import { authAtom, toastAtom } from '../../../_state';
 import VerticalNav from '../VerticalNav';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
@@ -20,6 +20,7 @@ const EditCourse = () => {
    const token = useRecoilValue(authAtom);
 
    const [course, setCourse] = useState(null);
+   const toast = useRecoilValue(toastAtom);
 
    const loadCourse = async () => {
       try {
@@ -29,12 +30,14 @@ const EditCourse = () => {
       } catch (error) {
          console.log(error);
       }
-
    }
 
    useEffect(() => {
       loadCourse();
    }, [])
+
+   useEffect(() => {
+   }, [toast])
 
    return (
       <>

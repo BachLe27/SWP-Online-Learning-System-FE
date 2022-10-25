@@ -15,7 +15,7 @@ const Overall = ({ course }) => {
    const [validated, setValidated] = useState(false);
    const token = useRecoilValue(authAtom);
    const [toast, setToast] = useRecoilState(toastAtom);
-
+   const [img, setImg] = useState(course.image);
    const [categories, setCategories] = useRecoilState(categoriesAtom);
 
    const loadCategories = async () => {
@@ -29,6 +29,19 @@ const Overall = ({ course }) => {
 
          setCategories(categoriesData);
 
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   const handleUploadImage = async (e) => {
+      console.log(e.target.files[0]);
+
+      try {
+         const image = e.target.files[0];
+         const uploadId = await (await userApi.upload(token, image)).data.detail;
+         console.log(uploadId);
+         setImg(uploadId);
       } catch (error) {
          console.log(error);
       }
@@ -49,10 +62,10 @@ const Overall = ({ course }) => {
 
    useEffect(() => {
 
-   }, [toast])
+   }, [toast, img])
 
    const onSubmit = async (data) => {
-
+      data.image = img;
       console.log(data);
       try {
          const updateCourse = await expertApi.updateCourse(token, course.id, data);
@@ -61,6 +74,7 @@ const Overall = ({ course }) => {
             status: 'primary',
             msg: 'Update course infomation successful!'
          })
+         window.scrollTo(0, 0);
       } catch (error) {
          console.log(error);
       }
@@ -122,19 +136,27 @@ const Overall = ({ course }) => {
                   })}
                   isInvalid={errors.description}
                   as="textarea"
+                  rows="4"
                   defaultValue={course.description}
                   placeholder="Enter description for your course..."
                />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="courseImg">
-               <Form.Label className="fw-semibold">Thumbnail Image (URL)</Form.Label>
+               <Form.Label className="fw-semibold">Thumbnail Image</Form.Label>
                <Form.Control
-                  isInvalid={errors.image}
-                  type="url"
-                  placeholder="URL to thumbnail image..."
+                  {...register("image")}
+                  onChange={handleUploadImage}
+                  type="file"
+                  accept=".jpg, .png, .jpeg"
                />
             </Form.Group>
+            <Form.Label className="fw-semibold me-3">Preview Image:</Form.Label>
+            {
+               img && <>
+                  <img width="200px" height="200px" className='border' src={`http://localhost:8000/upload/${img}`} alt="" />
+               </>
+            }
 
             <div className="d-flex justify-content-end">
                <Button variant="primary" type="submit">

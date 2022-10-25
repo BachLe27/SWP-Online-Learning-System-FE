@@ -1,5 +1,5 @@
 import { Button } from 'react-bootstrap';
-import { Link, useNavigate, usenavigation } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import logo from '../logo.png';
 import userAction from '../_actions/userApi';
@@ -9,6 +9,7 @@ const Navbar = () => {
 
    const [user, setUser] = useRecoilState(userAtom);
    const [auth, setAuth] = useRecoilState(authAtom);
+
    const navigate = useNavigate();
 
    const pathname = window.location.pathname;
@@ -19,8 +20,8 @@ const Navbar = () => {
       setAuth(null);
       localStorage.removeItem('user');
       localStorage.removeItem('auth');
-      window.location.replace("http://localhost:3000/login");
       // navigate('/login');
+      window.location.replace("http://localhost:3000/login");
    }
 
    return (
@@ -117,7 +118,7 @@ const Navbar = () => {
                            </li>
                            <li><Link className="dropdown-item" to="/profile">View Profile</Link></li>
                            <li><Link className="dropdown-item" to="/changePassword">Change Password</Link></li>
-                           <li><Link className="dropdown-item" to="/myCourse"> My courses</Link></li>
+                           <li><Link className="dropdown-item" to="/myCourses"> My courses</Link></li>
                            <li><Link className="dropdown-item" to="/myPost">My posts</Link></li>
                            <li><Link className="dropdown-item" to="/myPurchase">Purchase History</Link></li>
                            <li>

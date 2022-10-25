@@ -9,14 +9,13 @@ import MarkdownIt from 'markdown-it';
 import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 
-const AddLessonModal = ({ chapterId }) => {
+const EditLessonModal = ({ lesson }) => {
 
    const token = useRecoilValue(authAtom);
    const [toast, setToast] = useRecoilState(toastAtom);
    const [modalShow, setModalShow] = useState(false);
-   const [content, setContent] = useState('');
+   const [content, setContent] = useState(lesson.content);
    const mdParser = new MarkdownIt();
-
    // function onImageUpload(file) {
    //    return new Promise(resolve => {
    //       const reader = new FileReader();
@@ -26,6 +25,10 @@ const AddLessonModal = ({ chapterId }) => {
    //       reader.readAsDataURL(file);
    //    });
    // }
+   const loadLesson = async () => {
+
+   }
+
 
    // Finish!
    function handleEditorChange({ html, text }) {
@@ -36,14 +39,13 @@ const AddLessonModal = ({ chapterId }) => {
    const onSubmit = async (data) => {
       try {
          data.content = content;
-         const id = chapterId;
-         const addLesson = await expertApi.createLesson(token, id, data);
-         console.log(addLesson);
+         const updateLesson = await expertApi.updateLesson(token, lesson.id, data);
+         console.log(updateLesson);
 
          setToast({
             show: true,
             status: 'primary',
-            msg: 'Add Lesson Success'
+            msg: 'Update Lesson Success'
          })
 
          reset();
@@ -68,14 +70,16 @@ const AddLessonModal = ({ chapterId }) => {
 
    return (
       <>
-         <Button onClick={() => setModalShow(true)}><i class="fa-solid fa-plus"></i> Add Lesson</Button>
+         <Button variant="warning" onClick={() => setModalShow(true)}>
+            <i class="fa-solid fa-pen"></i>
+         </Button>
          <Modal show={modalShow} onHide={onHide} fullscreen={true} backdrop="static" >
             <Modal.Header closeButton>
-               <Modal.Title className="fw-bold">New Lesson</Modal.Title>
+               <Modal.Title className="fw-bold">Edit Lesson</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
-               <Form id="addChapterForm" onSubmit={handleSubmit(onSubmit)}>
+               <Form id="EditLessonForm" onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group className="mb-3" controlId="lessonTitle">
 
                      <Form.Label className="fw-semibold">Lesson Title</Form.Label>
@@ -85,6 +89,7 @@ const AddLessonModal = ({ chapterId }) => {
                         })}
                         type="text"
                         placeholder="Enter title"
+                        defaultValue={lesson.title}
                         className={`${errors.title ? "is-invalid" : ""}`}
                      />
                      <Form.Control.Feedback type="invalid">
@@ -101,6 +106,7 @@ const AddLessonModal = ({ chapterId }) => {
                         type="number"
                         placeholder="Enter duration time"
                         className={`${errors.duration ? "is-invalid" : ""}`}
+                        defaultValue={lesson.duration}
                      />
                      <Form.Control.Feedback type="invalid">
                         Lesson duration is required
@@ -116,6 +122,7 @@ const AddLessonModal = ({ chapterId }) => {
                         as="textarea"
                         placeholder="Description about chapter..."
                         className={`${errors.description ? "is-invalid" : ""}`}
+                        defaultValue={lesson.description}
                      />
                      <Form.Control.Feedback type="invalid">
                         Lesson description is required
@@ -129,6 +136,7 @@ const AddLessonModal = ({ chapterId }) => {
                         onChange={handleEditorChange}
                         canView={{ fullScreen: false, hideMenu: true }}
                         placeholder="Write your content..."
+                        value={content}
                      // onImageUpload={onImageUpload}
                      />
                   </Form.Group>
@@ -137,10 +145,10 @@ const AddLessonModal = ({ chapterId }) => {
 
             <Modal.Footer>
                <Button variant="secondary" onClick={onHide}>Close</Button>
-               <Button variant="primary" type="submit" form="addChapterForm" >
+               <Button variant="warning" type="submit" form="EditLessonForm" >
                   {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
                      <span class="visually-hidden">Loading...</span>
-                  </div>} Add new lesson
+                  </div>} Update Lesson
                </Button>
             </Modal.Footer>
          </Modal>
@@ -149,5 +157,5 @@ const AddLessonModal = ({ chapterId }) => {
    )
 }
 
-export default AddLessonModal
+export default EditLessonModal
 

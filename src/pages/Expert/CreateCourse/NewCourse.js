@@ -55,7 +55,8 @@ const NewCourse = () => {
       data.is_public = false;
       data.category_id = data.categories.value;
       delete data.categories;
-      //console.log(data);
+      data.image = img;
+      console.log(data);
       try {
 
          const createCourse = await expertApi.createCourse(token, data);
@@ -158,7 +159,7 @@ const NewCourse = () => {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="courseImg">
-               <Form.Label className="fw-semibold">Thumbnail Image (URL)</Form.Label>
+               <Form.Label className="fw-semibold">Thumbnail Image</Form.Label>
                <Form.Control
                   {...register("image", {
                      required: true
@@ -174,8 +175,6 @@ const NewCourse = () => {
                   <img width="200px" height="200px" className='border' src={`http://localhost:8000/upload/${img}`} alt="" />
                </>
             }
-
-
             <Button className='rounded-0 w-25 px-3 py-2 fw-semibold align-self-center mb-4 mt-3' variant="primary" type="submit">
                {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
                   <span class="visually-hidden">Loading...</span>

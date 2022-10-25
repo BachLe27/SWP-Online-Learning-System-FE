@@ -40,7 +40,7 @@ const Categories = () => {
                <StaffNav activeLink="/staff/categories" />
             </div>
 
-            <div className="col-10 border-start ps-4 w-50">
+            <div className=" border-start ps-4 w-50">
                <div className='my-3 d-flex justify-content-between align-items-center'>
                   <div className='d-flex'>
                      <h3 className='fw-bold'>Course Categories</h3>

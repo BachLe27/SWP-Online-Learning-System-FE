@@ -18,6 +18,9 @@ import CreatePost from '../pages/Blog/CreatePost';
 import CourseDetail from '../pages/Courses/View/CourseDetail';
 import Staff from '../pages/Staff';
 import Categories from '../pages/Staff/Categories';
+import MyCourses from '../pages/User/MyCourses';
+import PricePackage from '../pages/Staff/PricePackage';
+import Learn from '../pages/Courses/View/Learn';
 
 const publicRoutes = [
    { path: '/', component: Home },
@@ -26,7 +29,8 @@ const publicRoutes = [
    { path: '/unauthorized', component: Unauthorized },
    { path: '/blog', component: Blog },
    { path: '/courses', component: Courses },
-   { path: '/courses/detail', component: CourseDetail }
+   { path: '/courses/detail/:courseId', component: CourseDetail },
+
 ]
 
 const adminRoutes = [
@@ -45,15 +49,18 @@ const expertRoutes = [
 
 const staffRoutes = [
    { path: '/staff', component: Staff },
-   { path: '/staff/categories', component: Categories }
+   { path: '/staff/categories', component: Categories },
+   { path: '/staff/package', component: PricePackage }
 ]
 
 const privateRoutes = [
    { path: '/profile', component: Profile },
    { path: '/changePassword', component: ChangePassword },
-   { path: '/write', component: CreatePost }
+   { path: '/write', component: CreatePost },
+   { path: '/myCourses', component: MyCourses },
+   { path: '/course/:courseId/learn', component: Learn },
+   { path: '/course/:courseId/learn/:lessonId', component: Learn },
 ]
-
 
 
 export { publicRoutes, privateRoutes, adminRoutes, expertRoutes, staffRoutes };

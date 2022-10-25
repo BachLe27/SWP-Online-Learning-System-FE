@@ -75,7 +75,7 @@ body {
 
 
 .lesson_dropdown_list {
-   height: 100vh;
+   max-height: 80vh;
    overflow-y: scroll
 }
 

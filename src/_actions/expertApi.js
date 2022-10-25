@@ -66,8 +66,17 @@ const expertApi = {
       return axios(config);
    },
 
-   updateCourse(token, id, data) {
+   updateChapter(token, chapterId, data) {
+      const config = {
+         method: 'PUT',
+         data: JSON.stringify(data),
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         url: `/chapter/${chapterId}`
+      }
+      return axios(config);
+   },
 
+   updateCourse(token, id, data) {
       const config = {
          method: 'PUT',
          data: JSON.stringify(data),
@@ -88,10 +97,60 @@ const expertApi = {
       return axios(config);
    },
 
+   updateLesson(token, id, data) {
+      //console.log(data);
+      const config = {
+         method: 'PUT',
+         data: JSON.stringify(data),
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         url: `/lesson/${id}`
+      }
+      return axios(config);
+   },
+
    getLesson(id) {
       const config = {
          method: 'GET',
          url: `/chapter/${id}/lesson`
+      }
+      return axios(config);
+   },
+
+   createQuiz(token, id, data) {
+      console.log(data);
+      const config = {
+         method: 'POST',
+         data: JSON.stringify(data),
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         url: `/lesson/${id}/quiz`
+      }
+      return axios(config);
+   },
+
+   createQuestion(token, id, data) {
+      const config = {
+         method: 'POST',
+         data: JSON.stringify(data),
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         url: `/lesson/${id}/quiz/question`
+      }
+      return axios(config);
+   },
+
+   deleteChapter(token, id) {
+      const config = {
+         method: 'DELETE',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/chapter/${id}`
+      }
+      return axios(config);
+   },
+
+   deleteLesson(token, id) {
+      const config = {
+         method: 'DELETE',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/lesson/${id}`
       }
       return axios(config);
    }

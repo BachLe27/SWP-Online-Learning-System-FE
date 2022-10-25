@@ -59,7 +59,12 @@ const Course = ({ course, key }) => {
 
             <div className="d-flex py-2 ps-2">
                <div className="thumbnail">
-                  <img src="https://picsum.photos/250/180" alt="" />
+                  <img
+                     src={`http://localhost:8000/upload/${course.image}`}
+                     width="200px"
+                     height="200px"
+                     alt=""
+                  />
                </div>
 
                <div className="ms-3">
@@ -94,7 +99,7 @@ const Course = ({ course, key }) => {
                      <Button variant="primary" onClick={() => setModalShow(false)} type="submit" form={`confirmPublic${course.id}`} >{course.is_public ? "Hide" : "Public"}</Button>
                   </Modal.Footer>
                </Modal >
-               <Button variant='danger'>Delete</Button>
+
             </div>
          </div>
       </div>

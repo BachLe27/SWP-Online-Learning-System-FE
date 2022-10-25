@@ -10,6 +10,7 @@ import Pagination from 'react-bootstrap/Pagination'
 import EditModal from "./EditModal";
 import ToastNoti from "../../../components/ToastNoti";
 import Loading from "../../../components/Loading";
+import sortByDate from "../../../libs/sortByDate";
 
 const ListAccount = () => {
 
@@ -23,9 +24,12 @@ const ListAccount = () => {
       setLoading(true);
       try {
          const userData = await (await adminApi.getUsers(token)).data;
+
          while (userData.length !== 10) {
             userData.push('');
          }
+         // userData = sortByDate(userData);
+
          setUsers(userData);
          setLoading(false);
       } catch (error) {

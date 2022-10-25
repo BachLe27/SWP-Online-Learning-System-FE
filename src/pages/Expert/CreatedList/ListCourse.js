@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -46,18 +46,16 @@ const ListCourse = ({ page }) => {
                <h3 className="fw-bold text-primary pb-2">Your courses</h3>
                <Button as={Link} to="/expert/create">Create course</Button>
             </div>
-            {
-               loading ? <Loading /> :
-                  <div>
-                     {
-                        courses ? courses.length > 0 ?
-                           courses.map((course, index) => {
-                              return <Course course={course} key={course.id} />
-                           }) : <p>Empty. <Link to="/expert/create">Create new course</Link></p>
-                           : <></>
-                     }
-                  </div>
-            }
+
+            <div>
+               {
+                  loading ?
+                     <Loading /> :
+                     courses.length > 0 ? courses.map((course, index) => {
+                        return <Course course={course} key={course.id} />
+                     }) : <p>Empty. <Link to="/expert/create">Create new course</Link> </p>
+               }
+            </div>
 
          </div>
 

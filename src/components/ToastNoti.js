@@ -15,7 +15,7 @@ const ToastNoti = () => {
    if (toast != null)
       return (
          <ToastContainer className="p-3 position-fixed" position="bottom-end">
-            <Toast show={toast.show} bg='primary' onClose={() => setToast(null)} delay={7000} autohide >
+            <Toast show={toast.show} bg={toast.status} onClose={() => setToast(null)} delay={7000} autohide >
                <Toast.Header>
                   <img
                      src=""

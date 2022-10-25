@@ -33,31 +33,18 @@ const Profile = () => {
    const [show, setShow] = useState(false); // modal
    const [toast, setToast] = useRecoilState(toastAtom);
    const [user, setUser] = useRecoilState(userAtom);
-   const [success, setSuccess] = useState(false);
-
-   const [avatarImage, setAvatarImage] = useState();
+   const [img, setImg] = useState(user.avatar || 'https://picsum.photos/500/500');
 
    const handleClose = () => setShow(false);
    const handleShow = () => setShow(true);
 
    const onSubmit = async (data) => {
+      data.avatar = img;
       try {
-         console.log(data.avatar);
-         if (data.avatar.length > 0) {
-            const avatar = await userApi.updateAvatar(token, data.avatar[0]);
-            delete data.avatar;
-
-            setAvatarImage({
-               imgSrc: `http://localhost:8000/user/${user.id}/avatar`,
-               imgHash: Date.now()
-            });
-         }
-
          const change = await userApi.changeInfo(data, token);
          const newInfo = await userApi.authenticate(token);
          setUser(newInfo.data);
          localStorage.setItem('user', JSON.stringify(newInfo.data));
-         setSuccess(true);
          setShow(false);
          setToast(
             {
@@ -72,35 +59,21 @@ const Profile = () => {
       }
    }
 
-
-   const loadAvatar = async () => {
+   const handleUploadImage = async (e) => {
+      console.log(e.target.files[0]);
 
       try {
-         const avatarData = await userApi.getAvatar(token);
-         setAvatarImage({
-            imgSrc: `http://localhost:8000/user/${user.id}/avatar`,
-            imgHash: Date.now()
-         });
-
+         const image = e.target.files[0];
+         const uploadId = await (await userApi.upload(token, image)).data.detail;
+         console.log(uploadId);
+         setImg(uploadId);
       } catch (error) {
          console.log(error);
-         setAvatarImage({
-            imgSrc: `https://picsum.photos/500/500`,
-            imgHash: Date.now()
-         });
       }
    }
 
    useEffect(() => {
-      if (!token) {
-         setToken(authAtom);
-      }
-      loadAvatar();
-   }, [])
-
-
-   useEffect(() => {
-   }, [success, avatarImage])
+   }, [toast])
 
    return (
       <>
@@ -111,7 +84,7 @@ const Profile = () => {
                <div style={profileStyle}>
                </div>
                <div class="profile-photo w-100 d-flex flex-column align-items-center">
-                  {avatarImage && <img class="rounded-circle border border-dark border-3 img-fluid" height="150px" width="150px" src={`${avatarImage.imgSrc}?${avatarImage.imgHash}`} alt="" />}
+                  <img class="rounded-circle border border-dark border-3 img-fluid" height="150px" width="150px" src={img != 'https://picsum.photos/500/500' ? `http://localhost:8000/upload/${img}` : img} alt="" />
                   <p class="fs-3 fw-bold pt-3 mb-0 border-bottom border-2 border-dark">
                      {user.full_name}
                   </p>
@@ -204,17 +177,24 @@ const Profile = () => {
                                  </Form.Group>
 
                                  <Form.Group className="mb-3">
-                                    <Form.Label className="fw-semibold">Update Avatar</Form.Label>
+                                    <Form.Label className="fw-semibold">Avatar</Form.Label>
                                     <Form.Control
                                        {...register("avatar", {
                                           required: false
                                        })}
+                                       onChange={handleUploadImage}
                                        type="file"
-                                       defaultValue={user.avatar}
+                                       // defaultValue={user.avatar}
                                        accept=".jpg, .png, .jpeg"
                                     />
                                  </Form.Group>
 
+                                 {
+                                    img != 'https://picsum.photos/500/500' && <div className='my-5'>
+                                       <h3 className="fw-semibold me-4">Preview Avatar:</h3>
+                                       <img src={`http://localhost:8000/upload/${img}`} class="rounded-circle border border-dark border-3 img-fluid" height="150px" width="150px" alt='' />
+                                    </div>
+                                 }
                                  <Form.Group className="mb-3">
                                     <Form.Label className="fw-semibold">Bio</Form.Label>
                                     <Form.Control
