@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Accordion, Badge, Breadcrumb, Button, Nav } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
-import Navbar from '../../../../components/Navbar'
-import sortByDate from '../../../../libs/sortByDate'
-import userApi from '../../../../_actions/userApi'
+import Navbar from '../../../components/Navbar'
+import sortByDate from '../../../libs/sortByDate'
+import userApi from '../../../_actions/userApi'
 import Chapter from './Chapter'
 import MarkdownIt from 'markdown-it';
-import Loading from '../../../../components/Loading'
+import Loading from '../../../components/Loading'
 import ReactMarkdown from 'react-markdown'
 import QuizOverview from './QuizOverview'
+import getEmbedURL from '../../../libs/getEmbedURL'
 
 const Learn = () => {
    const param = useParams();
@@ -32,7 +33,7 @@ const Learn = () => {
          const id = param.lessonId;
          let lessonData = await (await userApi.getLesson(id)).data;
          setLesson(lessonData);
-         console.log(lessonData);
+         // console.log(lessonData);
       } catch (error) {
          console.log(error);
       }
@@ -48,7 +49,7 @@ const Learn = () => {
 
    useEffect(() => {
       loadLesson();
-   }, [param])
+   }, [param]);
 
 
    useEffect(() => {
@@ -58,7 +59,6 @@ const Learn = () => {
 
    return (
       <>
-
          <Navbar />
 
          <div className="container-fluid mt-6 row vh-75">
@@ -79,12 +79,12 @@ const Learn = () => {
                   <p className='fw-bold'>Course Content</p>
 
                   <Accordion defaultActiveKey="0" alwaysOpen>
-                     <Nav variant='pills' className="flex-column">
+                     <Nav variant='pills' defaultActiveKey={param.lessonId} className="flex-column">
                         {
                            chapters ?
                               chapters.map((chapter, index) => {
                                  return <Chapter key={index} num={index} chapter={chapter} courseId={param.courseId} />
-                              }) : <></>
+                              }) : <Loading />
                         }
                      </Nav>
                   </Accordion>
@@ -92,7 +92,7 @@ const Learn = () => {
             </div>
             <div className='col-md-9 pe-3'>
                {
-                  param.lessonId == null ? <h4 className='ms-4 fw-bold'>Choose an lesson to begin</h4> :
+                  param.lessonId == null ? <h4 className='border-bottom mt-5 ms-5'>Please select a lesson to begin...</h4> :
                      lesson ?
                         <>
                            <div className='border-bottom mb-4 ms-3'>
@@ -110,8 +110,9 @@ const Learn = () => {
                               <span className='text-muted'>{lesson.duration} minutes</span>
                            </div>
                            {
-                              lesson.has_quiz ? <QuizOverview lesson={lesson} /> :
-                                 <div className='mx-4 px-3'>
+                              lesson.has_quiz ? <QuizOverview lesson={lesson} key={lesson.id} /> :
+                                 <div className='mx-4 px-3' key={lesson.id}>
+                                    {lesson.video_url && <iframe className="w-100" height="500px" src={getEmbedURL(lesson.video_url)}></iframe>}
                                     <ReactMarkdown>{lesson.content}</ReactMarkdown>
                                  </div>
                            }

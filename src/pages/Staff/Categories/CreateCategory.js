@@ -49,7 +49,7 @@ const CreateCategory = () => {
       <>
          <Button onClick={() => setModalShow(true)}> <i class="fa-solid fa-plus"></i> New</Button>
 
-         <Modal show={modalShow} onHide={onHide} size="md">
+         <Modal show={modalShow} onHide={onHide} size="md" centered>
             <Modal.Header closeButton>
                <Modal.Title>New Category</Modal.Title>
             </Modal.Header>

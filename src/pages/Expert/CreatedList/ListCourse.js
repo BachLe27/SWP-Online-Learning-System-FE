@@ -44,7 +44,7 @@ const ListCourse = ({ page }) => {
          <div className="p-3">
             <div className="d-flex justify-content-between align-items-center border-bottom mb-3">
                <h3 className="fw-bold text-primary pb-2">Your courses</h3>
-               <Button as={Link} to="/expert/create">Create course</Button>
+               <Button className="fw-bold px-4 shadow rounded-1" as={Link} to="/expert/create">Create course</Button>
             </div>
 
             <div>

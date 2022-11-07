@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Button, OverlayTrigger, Table, Tooltip } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import Loading from '../../../components/Loading';
 import userApi from '../../../_actions/userApi';
 import { toastAtom } from '../../../_state';
 import CreateCategory from './CreateCategory'
+import DeleteCategory from './DeleteCategory';
+import EditCategory from './EditCategory';
+import sortByDate from '../../../libs/sortByDate'
+
 
 const Categories = () => {
 
@@ -13,7 +18,9 @@ const Categories = () => {
 
    const loadCategories = async () => {
       try {
-         const categoriesData = await (await userApi.getCategories()).data;
+         let categoriesData = await (await userApi.getCategories()).data;
+         categoriesData = sortByDate(categoriesData);
+         console.log(categoriesData);
          setCategories(categoriesData);
 
       } catch (error) {
@@ -31,7 +38,7 @@ const Categories = () => {
 
    return (
       <>
-         <div className="vh-75 col-7 ps-4 mt-4">
+         <div className="vh-75 col-9 ps-4 mt-4">
             <div className='my-3 d-flex justify-content-between align-items-center'>
                <div className='d-flex'>
                   <h3 className='fw-bold'>Course Categories</h3>
@@ -50,7 +57,7 @@ const Categories = () => {
                <CreateCategory />
             </div>
 
-            <Table striped bordered hover size="sm">
+            <Table striped hover size="md">
                <thead>
                   <tr>
                      <th> #</th>
@@ -62,10 +69,10 @@ const Categories = () => {
                   {
                      categories ?
                         categories.map((category, index) => {
-                           return <tr>
+                           return <tr key={index}>
                               <td>{index + 1}</td>
                               <td>{category.name}</td>
-                              <td className='col-2 text-center'><Button variant='warning'><i class="fa-solid fa-pen"></i></Button></td>
+                              <td className='text-center'> <EditCategory category={category} /> / <DeleteCategory category={category} /> </td>
                            </tr>
                         }) : <Loading />
                   }

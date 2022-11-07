@@ -1,15 +1,54 @@
-import React from 'react'
-import { Button } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { Button, Tab, Tabs } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import Footer from '../../../components/Footer'
+import Loading from '../../../components/Loading'
 import Navbar from '../../../components/Navbar'
+import ToastNoti from '../../../components/ToastNoti'
+import sortByComment from '../../../libs/sortByComment'
+import sortByDateAsc from '../../../libs/sortByDateAsc'
+import userApi from '../../../_actions/userApi'
 import PostOverview from './PostOverview'
 
 
 const Blog = () => {
+
+   const [posts, setPosts] = useState();
+   const [key, setKey] = useState('newest');
+   const [hots, setHots] = useState([]);
+
+   const loadPost = async () => {
+      try {
+         let postData = await (await userApi.getPosts()).data;
+         let newest = sortByDateAsc(postData);
+         setPosts(newest);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   const loadHots = async () => {
+      try {
+         let postData = await (await userApi.getPosts()).data;
+         let hot = sortByComment(postData);
+         setHots(hot);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+
+   useEffect(() => {
+      loadPost();
+      loadHots();
+   }, [])
+
+
    return (
+
       <>
          <Navbar />
-         <div id="blog-main" class="container mt-7">
+         <div id="blog-main" class="container mt-7 mb-5">
 
             <div className="blog-cover-photo mb-3 d-flex justify-content-center align-items-center flex-column">
                {/* <img width="100%" src="https://picsum.photos/800/300" alt="" /> */}
@@ -27,62 +66,37 @@ const Blog = () => {
                      <Button variant='secondary' class="input-group-text" type="submit"> <i class="fa-solid fa-magnifying-glass"></i></Button>
                   </div>
                </form>
-
             </div>
 
-            {/* <div class="mt-3 pb-3 border-bottom border-dark">
-               <Button className="me-2" variant="danger"> Hot </Button>
-               <Button className="me-2" variant="info"> Newest </Button>
-            </div> */}
-
-            <ul class="nav nav-tabs mt-3 mb-5">
-               <li class="nav-item">
-                  <a class="fw-bold nav-link active text-primary" href="#"><i class="fa-solid fa-newspaper"></i> Newest</a>
-               </li>
-               <li class="nav-item">
-                  <a class="fw-bold nav-link text-danger" href="#"><i class="fa-solid fa-fire"></i> Hot</a>
-               </li>
-            </ul>
-
-            <div class="posts my-4">
-
-               <PostOverview />
-               <PostOverview />
-               <PostOverview />
-               <PostOverview />
-               <PostOverview />
-
-            </div>
-
-            <nav aria-label="Page navigation example">
-               <ul class="pagination justify-content-center">
-                  <li class="page-item disabled">
-                     <a
-                        className="page-link"
-                        href="#"
-                        tabindex="-1"
-                        aria-disabled="true"
-                     >Previous</a>
-                  </li>
-                  <li class="page-item">
-                     <a class="page-link" href="#">1</a>
-                  </li>
-                  <li class="page-item">
-                     <a class="page-link" href="#">2</a>
-                  </li>
-                  <li class="page-item">
-                     <a class="page-link" href="#">3</a>
-                  </li>
-                  <li class="page-item">
-                     <a class="page-link" href="#">...</a>
-                  </li>
-                  <li class="page-item">
-                     <a class="page-link" href="#">Next</a>
-                  </li>
-               </ul>
-            </nav>
+            <Tabs
+               id="controlled-tab-example"
+               activeKey={key}
+               onSelect={(k) => setKey(k)}
+               className="mb-5"
+            >
+               <Tab className="vh-75" eventKey="newest" title={<span className='fw-bold text-primary'><i class="fa-solid fa-newspaper"></i> Newest</span>}>
+                  <div class="posts my-4">
+                     {
+                        posts ? posts.map((post, index) => {
+                           return <PostOverview post={post} key={index} />
+                        }) : <Loading />
+                     }
+                  </div>
+               </Tab>
+               <Tab className="vh-75" eventKey="hot" title={<span className='fw-bold text-danger'><i class="fa-solid fa-fire"></i> Hot</span>}>
+                  <div class="posts my-4">
+                     {
+                        hots ? hots.map((post, index) => {
+                           return <PostOverview post={post} key={hots.length * 2 + index + 1} />
+                        }) : <Loading />
+                     }
+                  </div>
+               </Tab>
+            </Tabs>
          </div>
+         <Footer />
 
+         <ToastNoti />
       </>
    )
 }

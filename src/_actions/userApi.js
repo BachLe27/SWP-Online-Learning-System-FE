@@ -178,8 +178,162 @@ const userApi = {
          url: `/course/enrolled`
       }
       return axios(config);
+   },
+
+   submitQuiz(token, id, data) {
+      const config = {
+         method: 'POST',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         data: JSON.stringify(data),
+         url: `/lesson/${id}/quiz/submission`
+      }
+      return axios(config);
+   },
+
+   createPost(token, data) {
+      const config = {
+         method: 'POST',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         data: JSON.stringify(data),
+         url: `/post`
+      }
+      return axios(config);
+   },
+
+   getPosts() {
+      const config = {
+         method: 'GET',
+         url: `/post`
+      }
+      return axios(config);
+   },
+
+   activate(token) {
+      const config = {
+         method: 'POST',
+         url: `/user/activate?token=${token}`
+      }
+      return axios(config);
+   },
+
+   sendFeedback(token, id, data) {
+      const config = {
+         method: 'POST',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         data: JSON.stringify(data),
+         url: `/course/${id}/feedback`
+      }
+      return axios(config);
+   },
+
+   resendFeedback(token, id, data) {
+      const config = {
+         method: 'PUT',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         data: JSON.stringify(data),
+         url: `/course/${id}/feedback/me`
+      }
+      return axios(config);
+   },
+
+   getMyFeedback(token, id) {
+      const config = {
+         method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/course/${id}/feedback/me`
+      }
+      return axios(config);
+   },
+
+   getPostContent(id) {
+      const config = {
+         method: 'GET',
+         url: `/post/${id}`
+      }
+      return axios(config);
+   },
+
+   getComment(id) {
+      const config = {
+         method: 'GET',
+         url: `/post/${id}/comment?limit=50`
+      }
+      return axios(config);
+   },
+
+   sendComment(token, id, data) {
+      const config = {
+         method: 'POST',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         data: JSON.stringify(data),
+         url: `/post/${id}/comment`
+      }
+      return axios(config);
+   },
+
+   getCreatedPosts(token) {
+      const config = {
+         method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/post/created`
+      }
+      return axios(config);
+   },
+
+   updatePost(token, id, data) {
+      const config = {
+         method: 'PUT',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         data: JSON.stringify(data),
+         url: `/post/${id}`
+      }
+      return axios(config);
+   },
+
+   deletePost(token, id) {
+      const config = {
+         method: 'DELETE',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/post/${id}`
+      }
+      return axios(config);
+   },
+
+   deleteComment(token, id) {
+      const config = {
+         method: 'DELETE',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/comment/${id}`
+      }
+      return axios(config);
+   },
+
+   updateComment(token, id, data) {
+      const config = {
+         method: 'PUT',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         data: JSON.stringify(data),
+         url: `/comment/${id}`
+      }
+      return axios(config);
+   },
+
+   getPackages() {
+      const config = {
+         method: 'GET',
+         url: `/price_package`
+      }
+      return axios(config);
+   },
+
+   purchase(token, id) {
+      const config = {
+         method: 'POST',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         data: JSON.stringify({ id: id }),
+         url: `/price_package/${id}/purchase`
+      }
+      return axios(config);
    }
-
 }
-
 export default userApi;

@@ -18,9 +18,9 @@ const CategoryRow = ({ name, courses }) => {
             }
          </div>
 
-         <div className='float-end'>
+         {/* <div className='float-end'>
             <Link>View all...</Link>
-         </div>
+         </div> */}
       </div>
    )
 }

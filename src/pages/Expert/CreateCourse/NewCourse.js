@@ -175,7 +175,7 @@ const NewCourse = () => {
                   <img width="200px" height="200px" className='border' src={`http://localhost:8000/upload/${img}`} alt="" />
                </>
             }
-            <Button className='rounded-0 w-25 px-3 py-2 fw-semibold align-self-center mb-4 mt-3' variant="primary" type="submit">
+            <Button className='rounded-1 w-25 px-3 py-2 fw-bold align-self-center mb-4 mt-3 shadow' variant="primary" type="submit">
                {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
                   <span class="visually-hidden">Loading...</span>
                </div>} Create Course

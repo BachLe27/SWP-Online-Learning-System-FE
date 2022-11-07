@@ -10,7 +10,7 @@
 #course-detail-heading {
    margin-top: 4rem;
    background-color: #2f697e;
-   height: 250px;
+   height: 300px;
 }
 
 body {
@@ -30,7 +30,7 @@ body {
 }
 
 .shadow-1 {
-   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
 #login {
@@ -39,8 +39,17 @@ body {
 
 .course-item:hover {
    cursor: pointer;
-   border-radius: 8px;
-   box-shadow: 0.3px 1px rgba(109, 106, 106, 0.5);
+   /* border-radius: 8px; */
+   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.post-item:hover {
+   cursor: pointer;
+   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.my-post-item:hover {
+   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 #slider {
@@ -73,7 +82,6 @@ body {
    margin-top: 4rem;
 }
 
-
 .lesson_dropdown_list {
    max-height: 80vh;
    overflow-y: scroll
@@ -86,4 +94,8 @@ body {
 .lesson-item:hover {
    background-color: rgba(240, 240, 240, 0.5);
    cursor: pointer;
+}
+
+.my-shadow {
+   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

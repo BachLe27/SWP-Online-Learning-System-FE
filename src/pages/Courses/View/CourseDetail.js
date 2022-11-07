@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Badge, Button } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import Rating from 'react-rating'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import Footer from '../../../components/Footer'
 import Loading from '../../../components/Loading'
@@ -23,6 +24,8 @@ const CourseDetail = () => {
    const toast = useRecoilValue(toastAtom);
    const token = useRecoilValue(authAtom);
 
+   const navigate = useNavigate();
+
    const loadCourse = async () => {
       try {
          const id = param.courseId;
@@ -39,16 +42,16 @@ const CourseDetail = () => {
          setOverview(overviewData.data);
          setChapters(chaptersData);
          setCourse(courseData.data);
-         console.log(enrolled);
+         // console.log(enrolled);
       } catch (error) {
          console.log(error);
       }
    }
 
-
    useEffect(() => {
+      // while (course == null)
       loadCourse();
-   }, [])
+   }, []);
 
    useEffect(() => {
 
@@ -63,25 +66,40 @@ const CourseDetail = () => {
          <Navbar />
          <div className='vh-75'>
             {
-               course ?
+               course && overview && chapters ?
                   <>
-                     <div id="course-detail-heading" class="container-fluid pt-3 shadow-sm">
+                     <div id="course-detail-heading" class="container-fluid pt-5 shadow-sm">
+
 
                         <div className="container d-flex justify-content-between">
                            <div class="align-self-center text-light">
-                              <h4 class="my-3"><Badge bg="danger">Provide by Expert</Badge></h4>
-                              <h2 class="mt-3 fw-bold">{course.title}</h2>
+                              <div class="d-flex align-items-center mb-2">
+                                 {/* <button class="btn fw-bold float-start my-0" onClick={() => { navigate('/courses') }}>
+                                    <i class="fas fa-arrow-left"></i> Back
+                                 </button> */}
+                                 <Badge bg="danger">
+                                    <p className='text-white m-0'>Provide by Expert</p>
+                                 </Badge>
+                              </div>
+                              <h2 class="fw-bold">{course.title}</h2>
                               <p className='m-0'>
-                                 Rating: <span>{overview.rating}</span> <i class="fa-regular fa-star"></i>
-                                 <i class="fa-regular fa-star"></i>
-                                 <i class="fa-regular fa-star"></i>
-                                 <i class="fa-regular fa-star"></i>
-                                 <i class="fa-regular fa-star"></i> (<span>{overview.rating_count}</span> reviews)
+                                 Rating: <span>{overview.rating.toFixed(1)} </span>
+                                 <Rating
+                                    start={0}
+                                    stop={5}
+                                    step={1}
+                                    initialRating={overview.rating.toFixed(1)}
+                                    readonly={true}
+                                    emptySymbol={<i class="fa-regular fa-star"></i>}
+                                    placeholderSymbol={<i class="text-warning fa-solid fa-star"></i>}
+                                    fullSymbol={<i class="text-warning fa-solid fa-star"></i>}
+                                 />
+                                 (<span>{overview.rating_count}</span> reviews)
                               </p>
                               <p className='m-0'>
                                  <span>{overview.learners_count}</span> Students • <span>{overview.chapters_count}</span> Chapters • <span>{(overview.duration / 60.0).toFixed(2)}</span> hours
                               </p>
-                              <p className='m-0'>Created by <Link className='text-white'>Teacher</Link> </p>
+                              <p className='m-0'>Created by <Link className='text-white'>{course.author.full_name}</Link> </p>
                            </div>
                            <img className='border shadow border-2 rounded p-2' src={`http://localhost:8000/upload/${course.image}`} height="200px" alt="" />
                         </div>
@@ -96,7 +114,7 @@ const CourseDetail = () => {
                            }
                            {
                               isEnrolled ?
-                                 <Button as={Link} preventScrollReset={true} to={`/course/${param.courseId}/learn`} className="shadow px-4 py-2 rounded-1 fw-bold ms-2">Go to course</Button> : <></>
+                                 <Button as={Link} preventScrollReset={true} to={`/course/${param.courseId}/learn`} className="shadow px-4 py-2 rounded-1 fw-bold ms-2">Go to Learn</Button> : <></>
                            }
                         </div>
 

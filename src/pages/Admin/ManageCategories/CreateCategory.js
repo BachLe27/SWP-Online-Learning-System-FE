@@ -47,7 +47,7 @@ const CreateCategory = () => {
 
    return (
       <>
-         <Button onClick={() => setModalShow(true)}> <i class="fa-solid fa-plus"></i> New</Button>
+         <Button className='fw-bold shadow px-3 rounded-1' onClick={() => setModalShow(true)}> <i class="fa-solid fa-plus"></i> New</Button>
 
          <Modal show={modalShow} onHide={onHide} size="md">
             <Modal.Header closeButton>
@@ -55,7 +55,7 @@ const CreateCategory = () => {
             </Modal.Header>
 
             <Modal.Body>
-               <Form id="addChapterForm" onSubmit={handleSubmit(onSubmit)}>
+               <Form id="addCategory" onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group className="mb-3" controlId="chapterTitle">
                      <Form.Label className='fw-bold'>Category Name</Form.Label>
                      <Form.Control
@@ -67,7 +67,7 @@ const CreateCategory = () => {
                         placeholder="Enter category's name"
                      />
                      <Form.Control.Feedback type="invalid">
-                        Chapter title is required
+                        Category Name is required
                      </Form.Control.Feedback>
                   </Form.Group>
                </Form>
@@ -75,7 +75,7 @@ const CreateCategory = () => {
 
             <Modal.Footer>
                <Button variant="secondary" onClick={onHide}>Close</Button>
-               <Button variant="primary" type="submit" form="addChapterForm" >
+               <Button className='fw-bold shadow px-3 rounded-1' variant="primary" type="submit" form="addCategory" >
                   {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
                      <span class="visually-hidden">Loading...</span>
                   </div>} Add

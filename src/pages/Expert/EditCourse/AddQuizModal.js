@@ -13,7 +13,7 @@ const AddQuizModal = ({ chapterId }) => {
    const [toast, setToast] = useRecoilState(toastAtom);
    const [modalShow, setModalShow] = useState(false);
    const [content, setContent] = useState('');
-   const [numberQuestion, setNumberQuestion] = useState(1);
+   const [numberQuestion, setNumberQuestion] = useState();
    const [genNum, setGenNum] = useState();
 
    const onSubmit = async (data) => {
@@ -22,44 +22,70 @@ const AddQuizModal = ({ chapterId }) => {
       let lessonData = (({ description, duration, title }) => ({ description, duration, title }))(data)
       lessonData.content = '';
       //console.log(lessonData);
-
       let quizData = (({ to_pass }) => ({ to_pass }))(data);
-
       quizData.to_pass = (quizData.to_pass / numberQuestion).toFixed(2);
       //console.log(quizData);
-
       let questionData = (({ questions }) => ({ questions }))(data);
-
       questionData.questions.forEach(q => {
          q.answers[0].is_correct = (q.answers.is_correct == "A");
          q.answers[1].is_correct = (q.answers.is_correct == "B");
          q.answers[2].is_correct = (q.answers.is_correct == "C");
          q.answers[3].is_correct = (q.answers.is_correct == "D");
       })
+      let lessonId = '';
 
-      console.log(questionData);
       try {
          const id = chapterId;
          const addLesson = await expertApi.createLesson(token, id, lessonData);
-         console.log(addLesson.data.detail);
+         if (addLesson.status != 200) {
+            setToast({
+               show: true,
+               status: 'danger',
+               msg: 'Add Quiz fail, connection error'
+            })
+            return;
+         }
+         // console.log(addLesson);
 
-         const lessonId = addLesson.data.detail;
+         lessonId = addLesson.data.detail;
          const addQuiz = await expertApi.createQuiz(token, lessonId, quizData);
-         console.log(addQuiz.data.detail);
+         // console.log(addQuiz);
 
-         questionData.questions.forEach(async (q) => {
-            const addQuestion = await expertApi.createQuestion(token, lessonId, q);
-            console.log(addQuestion);
-         })
+         if (addLesson.status != 200) {
+            const deleteTempLesson = await expertApi.deleteLesson(lessonId);
+            setToast({
+               show: true,
+               status: 'danger',
+               msg: 'Add Quiz fail, connection error'
+            })
+            return;
+         }
+
+         for (let q of questionData.questions) {
+            let addQuestion = await expertApi.createQuestion(token, lessonId, q);
+            if (addQuestion.status != 200) {
+               // console.log('delete');
+               const deleteTempLesson = await expertApi.deleteLesson(lessonId);
+               setToast({
+                  show: true,
+                  status: 'danger',
+                  msg: 'Add Quiz fail, connection error'
+               })
+               return;
+            }
+         }
+
          setToast({
             show: true,
             status: 'primary',
-            msg: 'Add Lesson Success'
+            msg: 'Add Quiz Success'
          })
 
          reset();
          setModalShow(false);
+
       } catch (error) {
+         const deleteTempLesson = await expertApi.deleteLesson(lessonId);
          console.log(error);
       }
    }
@@ -87,10 +113,10 @@ const AddQuizModal = ({ chapterId }) => {
    }
 
    const onHide = () => {
-      setModalShow(false);
       setGenNum(0);
       setNumberQuestion(0);
       reset();
+      setModalShow(false);
    }
 
    useEffect(() => {
@@ -107,7 +133,7 @@ const AddQuizModal = ({ chapterId }) => {
                <Modal.Title className="fw-bold">New Quiz</Modal.Title>
             </Modal.Header>
 
-            <Modal.Body className="d-flex justify-content-center" scrollable={true}>
+            <Modal.Body className="d-flex justify-content-center" scrollable>
                <Form id="addQuizForm" onSubmit={handleSubmit(onSubmit)} className="col-7">
                   <Form.Group className="mb-3" controlId="lessonTitle">
                      <Form.Label className="fw-semibold">Title</Form.Label>
@@ -208,7 +234,7 @@ const AddQuizModal = ({ chapterId }) => {
 
                         {
                            genNum ? genNum.map((item, index) => {
-                              return <div key={item.id}>
+                              return <div key={index}>
                                  <div className="border rounded mt-3 p-2">
                                     <span className='fw-bold'>Question {index + 1}.</span>
                                     <Form.Control

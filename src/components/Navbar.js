@@ -85,13 +85,15 @@ const Navbar = () => {
                      <Link className="nav-link text-dark" to="/blog"> <i className="fas fa-blog me-1"></i> Blog</Link>
                   </li>
 
+                  <li className="list-group-numbered ">
+                     <Link className="nav-link text-dark fw-bold" to="/purchase"> <i class="fa-solid fa-hand-point-right"></i> Learn!</Link>
+                  </li>
+
                   <li className="list-group-numbered d-block d-lg-none">
                      <Link className="nav-link text-dark" href="#">
                         <i className="fa-solid fa-magnifying-glass me-1"></i> Search
                      </Link>
                   </li>
-
-
 
                   {/* {user && <li className="nav-item">
                      <Link className="nav-link text-dark" href="#">
@@ -109,7 +111,7 @@ const Navbar = () => {
                         <ul className="pt-2 px-3 dropdown-menu dropdown-menu-end shadow" aria-labelledby="userOption">
                            <li>
                               <div className="dropdown-header d-flex align-items-center">
-                                 <img className="rounded-circle" src="https://picsum.photos/50/50" alt="" />
+                                 <img className="rounded-circle" width="50px" height="50px" src={user.avatar ? `http://localhost:8000/upload/${user.avatar}` : "https://picsum.photos/50/50"} alt="" />
                                  <span className="fw-bold dropdown-header">{user.full_name}</span>
                               </div>
                            </li>

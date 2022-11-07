@@ -18,12 +18,12 @@ const DeleteChapterModal = ({ chapterId }) => {
          const deleteChapter = await expertApi.deleteChapter(token, chapterId);
          console.log(deleteChapter);
          setIsSubmitting(false);
-         setModalShow(false);
          setToast({
             show: true,
             status: 'danger',
             msg: 'Chapter Deleted'
          })
+         setModalShow(false);
       } catch (error) {
          console.log(error);
       }

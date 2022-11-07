@@ -16,16 +16,7 @@ const AddLessonModal = ({ chapterId }) => {
    const [modalShow, setModalShow] = useState(false);
    const [content, setContent] = useState('');
    const mdParser = new MarkdownIt();
-
-   // function onImageUpload(file) {
-   //    return new Promise(resolve => {
-   //       const reader = new FileReader();
-   //       reader.onload = data => {
-   //          resolve(data.target.result);
-   //       };
-   //       reader.readAsDataURL(file);
-   //    });
-   // }
+   const [hasVideo, setHasVideo] = useState(false);
 
    // Finish!
    function handleEditorChange({ html, text }) {
@@ -34,6 +25,8 @@ const AddLessonModal = ({ chapterId }) => {
    }
 
    const onSubmit = async (data) => {
+      console.log(data);
+
       try {
          data.content = content;
          const id = chapterId;
@@ -45,8 +38,8 @@ const AddLessonModal = ({ chapterId }) => {
             status: 'primary',
             msg: 'Add Lesson Success'
          })
-
          reset();
+         setHasVideo(false);
          setModalShow(false);
       } catch (error) {
          console.log(error);
@@ -111,7 +104,7 @@ const AddLessonModal = ({ chapterId }) => {
                      <Form.Label className="fw-semibold">Description</Form.Label>
                      <Form.Control
                         {...register("description", {
-                           required: true
+                           required: true,
                         })}
                         as="textarea"
                         placeholder="Description about chapter..."
@@ -121,6 +114,30 @@ const AddLessonModal = ({ chapterId }) => {
                         Lesson description is required
                      </Form.Control.Feedback>
                   </Form.Group>
+
+                  <Form.Check
+                     type="switch"
+                     id="custom-switch"
+                     label={<Form.Label className="fw-semibold">Video</Form.Label>}
+                     onChange={() => { setHasVideo(!hasVideo) }}
+                  />
+
+                  {
+                     hasVideo ? <Form.Group className="mb-3" controlId="url">
+                        <Form.Label className="fw-semibold">URL Video</Form.Label>
+                        <Form.Control
+                           {...register("video_url", { required: true })}
+                           type="url"
+                           placeholder=""
+                           className={`${errors.video_url ? "is-invalid" : ""}`}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                           Video url is required
+                        </Form.Control.Feedback>
+                     </Form.Group> : <></>
+                  }
+
+
                   <Form.Group className="mb-3" controlId="lessonContent">
                      <Form.Label className="fw-semibold">Lesson Content</Form.Label>
                      <MdEditor

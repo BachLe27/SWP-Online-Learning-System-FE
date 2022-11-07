@@ -48,7 +48,7 @@ const EditChapterModal = ({ chapterId }) => {
 
    useEffect(() => {
       loadChapter();
-   }, [modalShow])
+   }, [])
 
    const {
       register,
@@ -104,6 +104,7 @@ const EditChapterModal = ({ chapterId }) => {
                            as="textarea"
                            placeholder="Description about chapter..."
                            defaultValue={data.description}
+
                         />
                         <Form.Control.Feedback type="invalid">
                            Chapter description is required

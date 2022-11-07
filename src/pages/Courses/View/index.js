@@ -22,7 +22,7 @@ const Courses = () => {
    const [result, setResult] = useState();
 
    const filterByCategories = (e) => {
-      console.log(e.value);
+      //console.log(e.value);
       setFilter(e.value);
    }
 
@@ -56,13 +56,12 @@ const Courses = () => {
 
          courses.forEach(course => {
             if (course.is_public == false) return;
-            if (filterCourse[mapCategory.get(course.category_id)] == undefined)
-               filterCourse[mapCategory.get(course.category_id)] = [];
-            filterCourse[mapCategory.get(course.category_id)].push(course);
+            if (filterCourse[mapCategory.get(course.category.id)] == undefined)
+               filterCourse[mapCategory.get(course.category.id)] = [];
+            filterCourse[mapCategory.get(course.category.id)].push(course);
          })
 
          setFilteredCourses(filterCourse);
-         console.log(courses);
       } catch (error) {
          console.log(error);
       }
@@ -117,7 +116,7 @@ const Courses = () => {
 
             <div>
                <div className='mt-4 mb-5'>
-                  {
+                  {/* {
                      !filter && <>
                         <h4 className='fw-semibold text-danger'><i class="fa-solid fa-fire"></i> Top Categories</h4>
                         <div className='col-5 d-flex justify-content-between mt-3'>
@@ -127,7 +126,7 @@ const Courses = () => {
                            <Link>Math</Link>
                         </div>
                      </>
-                  }
+                  } */}
 
                   <div className='col-5 mt-5'>
                      <h4>Sort by categories</h4>
@@ -139,7 +138,7 @@ const Courses = () => {
                   filteredCourses ?
                      filter ?
                         filteredCourses.map((courses, index) => {
-                           return courses[0].category_id == filter ?
+                           return courses[0].category.id == filter ?
                               <CategoryRow name={map.get(index)} key={index} courses={courses} />
                               : <></>
                         }) :

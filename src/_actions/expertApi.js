@@ -87,7 +87,7 @@ const expertApi = {
    },
 
    createLesson(token, id, data) {
-      console.log(data);
+
       const config = {
          method: 'POST',
          data: JSON.stringify(data),
@@ -116,8 +116,16 @@ const expertApi = {
       return axios(config);
    },
 
+   getLessonById(id) {
+      const config = {
+         method: 'GET',
+         url: `/lesson/${id}`
+      }
+      return axios(config);
+   },
+
    createQuiz(token, id, data) {
-      console.log(data);
+
       const config = {
          method: 'POST',
          data: JSON.stringify(data),
@@ -128,6 +136,7 @@ const expertApi = {
    },
 
    createQuestion(token, id, data) {
+      // console.log(data);
       const config = {
          method: 'POST',
          data: JSON.stringify(data),
@@ -151,6 +160,15 @@ const expertApi = {
          method: 'DELETE',
          headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
          url: `/lesson/${id}`
+      }
+      return axios(config);
+   },
+
+   getQuiz(token, id) {
+      const config = {
+         method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/lesson/${id}/quiz`
       }
       return axios(config);
    }

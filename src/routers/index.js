@@ -20,7 +20,14 @@ import Staff from '../pages/Staff';
 import Categories from '../pages/Staff/Categories';
 import MyCourses from '../pages/User/MyCourses';
 import PricePackage from '../pages/Staff/PricePackage';
-import Learn from '../pages/Courses/View/Learn';
+import Learn from '../pages/Courses/Learn';
+import DoQuiz from '../pages/Courses/DoQuiz';
+import Purchase from '../pages/Purchase/Purchase';
+import Active from '../pages/Guest/Active/Active';
+import PostContent from '../pages/Blog/PostContent/PostContent';
+import MyPost from '../pages/User/MyPost/MyPost';
+import Pay from '../pages/Purchase/Pay';
+import MyPurchase from '../pages/User/MyPurchase/MyPurchase';
 
 const publicRoutes = [
    { path: '/', component: Home },
@@ -28,8 +35,11 @@ const publicRoutes = [
    { path: '/register', component: Register },
    { path: '/unauthorized', component: Unauthorized },
    { path: '/blog', component: Blog },
+   { path: '/post/:id', component: PostContent },
    { path: '/courses', component: Courses },
    { path: '/courses/detail/:courseId', component: CourseDetail },
+   { path: '/purchase', component: Purchase },
+   { path: '/activate', component: Active }
 
 ]
 
@@ -60,6 +70,10 @@ const privateRoutes = [
    { path: '/myCourses', component: MyCourses },
    { path: '/course/:courseId/learn', component: Learn },
    { path: '/course/:courseId/learn/:lessonId', component: Learn },
+   { path: '/doquiz/:lessonId', component: DoQuiz },
+   { path: '/myPost', component: MyPost },
+   { path: '/pay/:packId', component: Pay },
+   { path: '/myPurchase', component: MyPurchase }
 ]
 
 

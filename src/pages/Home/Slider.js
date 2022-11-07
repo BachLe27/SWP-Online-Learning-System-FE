@@ -1,4 +1,6 @@
 import Carousel from 'react-bootstrap/Carousel';
+import slider1 from './img/slider1.jpg'
+
 const Slider = () => {
 
    const sliderImgStyle = {
@@ -14,7 +16,8 @@ const Slider = () => {
          <Carousel.Item>
             <img
                className="d-block w-100"
-               src="https://picsum.photos/800/300"
+               height="450px"
+               src={slider1}
                alt="First slide"
             />
             <Carousel.Caption>
@@ -25,18 +28,20 @@ const Slider = () => {
          <Carousel.Item>
             <img
                className="d-block w-100"
+               height="450px"
                src="https://picsum.photos/800/300"
                alt="Second slide"
             />
 
-            <Carousel.Caption>
+            {/* <Carousel.Caption>
                <h3 className='fw-bold text-white fs-2'>Second slide label</h3>
                <p className='fw-bold text-white'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </Carousel.Caption>
+            </Carousel.Caption> */}
          </Carousel.Item>
          <Carousel.Item>
             <img
                className="d-block w-100"
+               height="450px"
                src="https://picsum.photos/800/300"
                alt="Third slide"
             />

@@ -49,7 +49,7 @@ const AddChapterModal = ({ courseId }) => {
 
    return (
       <>
-         <Button onClick={() => setModalShow(true)}> <i class="fa-solid fa-plus"></i> Add Chapter</Button>
+         <Button className='fw-bold shadow px-3 rounded-1' onClick={() => setModalShow(true)}> <i class="fa-solid fa-plus"></i> Add Chapter</Button>
 
          <Modal show={modalShow} onHide={onHide} size="lg">
             <Modal.Header closeButton>
@@ -92,7 +92,7 @@ const AddChapterModal = ({ courseId }) => {
 
             <Modal.Footer>
                <Button variant="secondary" onClick={onHide}>Close</Button>
-               <Button variant="primary" type="submit" form="addChapterForm" >
+               <Button className='fw-bold shadow px-3 rounded-1' variant="primary" type="submit" form="addChapterForm" >
                   {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
                      <span class="visually-hidden">Loading...</span>
                   </div>} Add

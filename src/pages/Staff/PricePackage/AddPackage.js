@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Form, FormSelect, Modal } from 'react-bootstrap'
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import ToastNoti from '../../../components/ToastNoti';
+import staffApi from '../../../_actions/staffApi';
 import { authAtom, toastAtom } from '../../../_state';
 
 const AddPackage = () => {
@@ -14,8 +17,20 @@ const AddPackage = () => {
       setModalShow(false);
    }
 
-   const onSubmit = async () => {
-
+   const onSubmit = async (data) => {
+      console.log(data);
+      try {
+         const newPackage = await staffApi.createPackage(token, data);
+         setToast({
+            show: true,
+            status: 'primary',
+            msg: 'Add Package Success'
+         })
+         reset();
+         setModalShow(false);
+      } catch (error) {
+         console.log(error);
+      }
    }
 
    const {
@@ -29,13 +44,13 @@ const AddPackage = () => {
 
    return (
       <>
-         <Button onClick={() => setModalShow(true)}>New Package</Button>
+         <Button className="px-3 shadow fw-bold rounded-1" onClick={() => setModalShow(true)}>New Package</Button>
          <Modal show={modalShow} onHide={onHide} size="lg">
             <Modal.Header closeButton>
                <Modal.Title>New Package </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-               <Form id="addChapterForm" onSubmit={handleSubmit(onSubmit)} className="px-3">
+               <Form id="addPackage" onSubmit={handleSubmit(onSubmit)} className="px-3">
                   <Form.Group className="mb-3" controlId="packageDescription">
                      <Form.Label className='fw-semibold'>Description</Form.Label>
                      <Form.Control
@@ -52,13 +67,13 @@ const AddPackage = () => {
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="packageDuration">
-                     <Form.Label className='fw-semibold'>Duration</Form.Label>
+                     <Form.Label className='fw-semibold'>Duration (days)</Form.Label>
                      <Form.Control
                         {...register("duration", {
                            required: true
                         })}
                         className={`${errors.duration ? "is-invalid" : ""}`}
-                        type="date"
+                        type="number"
                      />
                      <Form.Control.Feedback type="invalid">
                         Duration is required
@@ -99,11 +114,12 @@ const AddPackage = () => {
             </Modal.Body>
             <Modal.Footer>
                <Button variant="secondary" onClick={onHide}>Close</Button>
-               <Button>
+               <Button type="submit" form="addPackage">
                   Add Package
                </Button>
             </Modal.Footer>
          </Modal>
+         <ToastNoti />
       </>
    )
 }

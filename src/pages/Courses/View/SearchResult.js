@@ -1,13 +1,17 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const SearchResult = ({ result }) => {
+
+   const navigate = useNavigate();
+
    return (
       <div className="position-relative col-6" height="200px" style={{ zIndex: "1000" }}>
          <div className="position-absolute w-100 p-3 border border-2 bg-white shadow rounded top-0 left-0">
             {
                result && result.length > 0 ? result.map((item, index) => {
                   return <>
-                     <div className='py-2 d-flex align-items-center border-bottom rounded'>
+                     <div onClick={() => { navigate(`/courses/detail/${item.id}`) }} className='p-2 d-flex align-items-center border-bottom rounded course-item'>
                         <img
                            className="border border-secondary rounded-3"
                            height="60px"

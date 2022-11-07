@@ -11,6 +11,7 @@ import EditModal from "./EditModal";
 import ToastNoti from "../../../components/ToastNoti";
 import Loading from "../../../components/Loading";
 import sortByDate from "../../../libs/sortByDate";
+import { Link } from "react-router-dom";
 
 const ListAccount = () => {
 
@@ -51,11 +52,11 @@ const ListAccount = () => {
    return (
       <div>
          <div className="p-3">
-            <h2 className="fw-bold mb-3">G6's Account</h2>
-            <div className="">
+            <div className="container">
+               <h2 className="fw-bold mb-3">G6's Account</h2>
                {
                   loading ? <Loading /> :
-                     <Table striped bordered hover>
+                     <Table responsive hover className="bg-white">
                         <thead>
                            <tr>
                               <th>#</th>
@@ -88,12 +89,12 @@ const ListAccount = () => {
                                           {user &&
                                              <>
                                                 <OverlayTrigger placement="top" overlay={<Tooltip> Edit </Tooltip>}>
-                                                   <Button variant="warning" className="me-1" data-bs-toggle="modal" data-bs-target={`#edit-${user.username}`}>
-                                                      <i className="fa-solid fa-pen-to-square"></i>
+                                                   <Button variant="warning" className='me-1 fw-bold shadow rounded-1' data-bs-toggle="modal" data-bs-target={`#edit-${user.username}`}>
+                                                      <i className="fa-solid fa-pen"></i>
                                                    </Button>
                                                 </OverlayTrigger>
                                                 <OverlayTrigger placement="top" overlay={<Tooltip> Delete </Tooltip>}>
-                                                   <Button variant="danger" className="d-inline">
+                                                   <Button variant="danger" className='fw-bold shadow rounded-1'>
                                                       <i className="fa-solid fa-trash"></i>
                                                    </Button>
                                                 </OverlayTrigger>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -8,6 +8,7 @@ import expertApi from '../../../_actions/expertApi';
 import MarkdownIt from 'markdown-it';
 import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
+import { useNavigate } from 'react-router-dom';
 
 const EditLessonModal = ({ lesson }) => {
 
@@ -16,23 +17,15 @@ const EditLessonModal = ({ lesson }) => {
    const [modalShow, setModalShow] = useState(false);
    const [content, setContent] = useState(lesson.content);
    const mdParser = new MarkdownIt();
-   // function onImageUpload(file) {
-   //    return new Promise(resolve => {
-   //       const reader = new FileReader();
-   //       reader.onload = data => {
-   //          resolve(data.target.result);
-   //       };
-   //       reader.readAsDataURL(file);
-   //    });
-   // }
+   const [hasVideo, setHasVideo] = useState(lesson.video_url ? true : false);
+   const navigate = useNavigate();
+
    const loadLesson = async () => {
 
    }
 
-
    // Finish!
    function handleEditorChange({ html, text }) {
-      // console.log(html, text);
       setContent(text);
    }
 
@@ -40,15 +33,12 @@ const EditLessonModal = ({ lesson }) => {
       try {
          data.content = content;
          const updateLesson = await expertApi.updateLesson(token, lesson.id, data);
-         console.log(updateLesson);
-
          setToast({
             show: true,
             status: 'primary',
             msg: 'Update Lesson Success'
          })
 
-         reset();
          setModalShow(false);
       } catch (error) {
          console.log(error);
@@ -65,7 +55,8 @@ const EditLessonModal = ({ lesson }) => {
    });
 
    const onHide = () => {
-      setModalShow(false)
+      reset();
+      setModalShow(false);
    }
 
    return (
@@ -128,6 +119,32 @@ const EditLessonModal = ({ lesson }) => {
                         Lesson description is required
                      </Form.Control.Feedback>
                   </Form.Group>
+
+                  <Form.Check
+                     type="switch"
+                     id="custom-switch"
+                     checked={hasVideo}
+                     label={<Form.Label className="fw-semibold">Video</Form.Label>}
+                     onChange={() => { setHasVideo(!hasVideo) }}
+                  />
+
+                  {
+                     hasVideo ? <Form.Group className="mb-3" controlId="url">
+                        <Form.Label className="fw-semibold">URL Video</Form.Label>
+                        <Form.Control
+                           {...register("video_url", { required: true })}
+                           type="url"
+                           placeholder=""
+                           className={`${errors.video_url ? "is-invalid" : ""}`}
+                           defaultValue={lesson.video_url}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                           Video url is required
+                        </Form.Control.Feedback>
+                     </Form.Group> : <></>
+                  }
+
+
                   <Form.Group className="mb-3" controlId="lessonContent">
                      <Form.Label className="fw-semibold">Lesson Content</Form.Label>
                      <MdEditor
@@ -152,7 +169,6 @@ const EditLessonModal = ({ lesson }) => {
                </Button>
             </Modal.Footer>
          </Modal>
-         <ToastNoti />
       </>
    )
 }

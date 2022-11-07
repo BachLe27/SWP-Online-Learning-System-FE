@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Button, OverlayTrigger, Table, Tooltip } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import Footer from '../../../components/Footer'
 import Loading from '../../../components/Loading'
 import Navbar from '../../../components/Navbar'
 import userApi from '../../../_actions/userApi'
 import { toastAtom } from '../../../_state'
+import DeleteCategory from '../../Admin/ManageCategories/DeleteCategory'
+import EditCategory from '../../Admin/ManageCategories/EditCategory'
 import StaffNav from '../StaffNav'
 import CreateCategory from './CreateCategory'
 
@@ -64,7 +67,7 @@ const Categories = () => {
                      <tr>
                         <th>#</th>
                         <th>Category Name</th>
-                        <th className='col-2 text-center'>Edit</th>
+                        <th className='text-center'>Action</th>
                      </tr>
                   </thead>
                   <tbody>
@@ -74,7 +77,7 @@ const Categories = () => {
                               return <tr>
                                  <td>{index + 1}</td>
                                  <td>{category.name}</td>
-                                 <td className='col-2 text-center'><Button variant='warning'><i class="fa-solid fa-pen"></i></Button></td>
+                                 <td className='text-center'><EditCategory category={category} /> / <DeleteCategory category={category} /> </td>
                               </tr>
                            }) : <Loading />
                      }

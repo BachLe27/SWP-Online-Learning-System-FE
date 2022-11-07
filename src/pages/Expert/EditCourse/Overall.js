@@ -30,17 +30,17 @@ const Overall = ({ course }) => {
          setCategories(categoriesData);
 
       } catch (error) {
-         console.log(error);
+         //console.log(error);
       }
    }
 
    const handleUploadImage = async (e) => {
-      console.log(e.target.files[0]);
+      //console.log(e.target.files[0]);
 
       try {
          const image = e.target.files[0];
          const uploadId = await (await userApi.upload(token, image)).data.detail;
-         console.log(uploadId);
+         // console.log(uploadId);
          setImg(uploadId);
       } catch (error) {
          console.log(error);
@@ -66,7 +66,7 @@ const Overall = ({ course }) => {
 
    const onSubmit = async (data) => {
       data.image = img;
-      console.log(data);
+      //console.log(data);
       try {
          const updateCourse = await expertApi.updateCourse(token, course.id, data);
          setToast({
@@ -104,9 +104,9 @@ const Overall = ({ course }) => {
                   {
                      categories &&
                      categories.map((category, index) => {
-                        return <option
-                           selected={category.value == course.category_id}
+                        return <option key={index}
                            value={category.value}
+                           selected={category.value == course.category_id}
                         >{category.label}</option>
                      })
                   }
@@ -159,7 +159,7 @@ const Overall = ({ course }) => {
             }
 
             <div className="d-flex justify-content-end">
-               <Button variant="primary" type="submit">
+               <Button className='fw-bold shadow px-3 rounded-1' variant="primary" type="submit">
                   {isSubmitting && <div class="spinner-border spinner-border-sm" role="status">
                      <span class="visually-hidden">Loading...</span>
                   </div>} Save Changes

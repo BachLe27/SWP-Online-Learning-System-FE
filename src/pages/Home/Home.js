@@ -1,33 +1,65 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import ToastNoti from "../../components/ToastNoti";
+import sortByDate from "../../libs/sortByDate";
+import sortByDateAsc from "../../libs/sortByDateAsc";
 import userApi from "../../_actions/userApi";
 import { categoriesAtom } from "../../_state";
 import HomeCourse from "./HomeCourse";
-import HotCourse from "./HotCourse";
 import HotTopic from "./HotTopic";
 import Package from "./Package";
+import PackageRow from "./PackageRow";
+import Popular from "./Popular";
 import Slider from "./Slider";
+import Trending from "./Trending";
 
 const Home = () => {
 
-   const [categories, setCategories] = useRecoilState(categoriesAtom);
+   const [courses, setCourses] = useState();
 
-   const loadCategories = async () => {
+   const [posts, setPosts] = useState();
+
+   const loadData = async () => {
       try {
-         const categoriesData = await (await userApi.getCategories()).data;
-         setCategories(categoriesData);
+         let coursesData = await (await userApi.getAllCourses()).data;
+         coursesData = sortByDateAsc(coursesData);
+         let filterCourse = [];
+
+         coursesData.forEach(course => {
+            if (course.is_public == false) return;
+            filterCourse.push(course)
+         })
+
+         filterCourse = filterCourse.slice(0, 4);
+
+         setCourses(filterCourse);
       } catch (error) {
          console.log(error);
       }
    }
 
+   const loadPost = async () => {
+      try {
+         let postData = await (await userApi.getPosts()).data;
+         postData.forEach(async post => {
+            let commentData = (await userApi.getComment(post.id)).data;
+            post.comment_count = commentData.length;
+         });
+         postData = sortByDateAsc(postData);
+         postData = postData.slice(0, 4);
+         setPosts(postData);
+      } catch (err) {
+         console.log(err);
+      }
+   }
+
    useEffect(() => {
-      if (categories == null)
-         loadCategories();
+      loadData();
+      loadPost();
    }, []);
 
    return (
@@ -43,38 +75,22 @@ const Home = () => {
                   Our Courses
                </h1>
 
-               <div class="category-container">
-                  <div class="category-name d-flex justify-content-between align-items-center">
-                     <h3 class="fw-bold text-primary">Most Popular</h3>
-                  </div>
-                  <HotCourse />
-               </div>
-
-               <div class="category-container">
-                  <div class="category-name d-flex justify-content-between align-items-center">
-                     <h3 class="fw-bold text-primary">Trending</h3>
-                  </div>
-                  <div class="courses mb-4 row">
-                     <HomeCourse />
-                     <HomeCourse />
-                     <HomeCourse />
-                     <HomeCourse />
-                  </div>
+               <Trending courses={courses} />
+               <Popular courses={courses} />
+               <div className="d-flex justify-content-end">
+                  <Link to={'/courses'} className="fw-bold">View All Courses <i class="fa-solid fa-arrow-right"></i></Link>
                </div>
             </div>
 
             <div id="home-blogs" className="container">
-               <HotTopic />
-            </div>
-
-            <div id="home-packages" class="mb-5">
-               <h1 class="fw-bold text-center my-5 text-primary border-bottom">Learn today</h1>
-               <div class="home-packages-container row">
-                  <Package />
-                  <Package />
-                  <Package />
+               <HotTopic posts={posts} />
+               <div className="d-flex justify-content-end">
+                  <Link to={'/blog'} className="fw-bold">View All Topic <i class="fa-solid fa-arrow-right"></i></Link>
                </div>
             </div>
+
+            <PackageRow />
+
          </div>
          <ToastNoti />
          <Footer />

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Accordion, Badge, Nav } from 'react-bootstrap'
-import { Link } from 'react-router-dom';
-import sortByDate from '../../../../libs/sortByDate';
-import expertApi from '../../../../_actions/expertApi';
+import { Link, useParams } from 'react-router-dom';
+import sortByDate from '../../../libs/sortByDate';
+import expertApi from '../../../_actions/expertApi';
 
 const Chapter = ({ num, chapter, courseId }) => {
 
    const [lessons, setLessons] = useState();
+   const param = useParams();
 
    const loadLesson = async () => {
       try {
@@ -43,9 +44,16 @@ const Chapter = ({ num, chapter, courseId }) => {
                         preventScrollReset={true}
                         as={Link}
                         to={`/course/${courseId}/learn/${lesson.id}`}
-                        eventKey={`${chapter.id}/${index}`}
+                        eventKey={`${lesson.id}`}
                      >
-                        {lesson.has_quiz ? <Badge bg="info">Quiz </Badge> : ""} {lesson.title.length < 25 ? lesson.title : `${lesson.title.substr(0, 25)}...`}
+
+                        {lesson.has_quiz ? <span><i class="fa-regular fa-square-check"></i> </span> :
+                           lesson.video_url ? <span> <i class="fa-regular fa-circle-play"></i> </span> :
+                              <span> <i class="fa-regular fa-file-lines"></i> </span>
+                        }
+                        {
+                           lesson.title.length < 25 ? lesson.title : `${lesson.title.substr(0, 25)}...`
+                        }
                      </Nav.Link>
                   }) : <></>
                }

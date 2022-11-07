@@ -1,10 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, OverlayTrigger, Table, Tooltip } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import Loading from '../../../components/Loading'
 import Navbar from '../../../components/Navbar'
+import staffApi from '../../../_actions/staffApi'
+import { authAtom, toastAtom } from '../../../_state'
 import StaffNav from '../StaffNav'
 import AddPackage from './AddPackage'
+import EditPackage from './EditPackage'
 
 const PricePackage = () => {
+
+   const token = useRecoilValue(authAtom);
+   const [packages, setPackages] = useState();
+   const toast = useRecoilValue(toastAtom);
+
+   const loadPackage = async () => {
+      try {
+         const packageData = await (await staffApi.getPackages(token)).data;
+         setPackages(packageData);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
+   useEffect(() => {
+      loadPackage();
+   }, [])
+
+   useEffect(() => {
+      loadPackage();
+   }, [toast])
+
    return (
       <>
          <Navbar />
@@ -34,17 +62,26 @@ const PricePackage = () => {
 
                <Table striped bordered hover size="sm">
                   <thead>
-                     <tr>
+                     <tr className='text-center'>
                         <th>#</th>
                         <th>Description</th>
                         <th>Duration</th>
                         <th>Price($)</th>
                         <th>Active</th>
-                        <th className='col-2 text-center'>Edit</th>
+                        <th className='col-2 text-center'>Action</th>
                      </tr>
                   </thead>
                   <tbody>
-
+                     {packages ? packages.map((p, index) => {
+                        return <tr className='text-center'>
+                           <td>{index + 1}</td>
+                           <td>{p.description}</td>
+                           <td>{p.duration}</td>
+                           <td>{p.price}</td>
+                           <td>{p.is_active ? <i class="fa-regular fa-circle-check text-success"></i> : <i class="fa-regular fa-circle-xmark text-danger"></i>}</td>
+                           <td> <EditPackage pack={p} /> / <Link>Delete</Link></td>
+                        </tr>
+                     }) : <Loading />}
                   </tbody>
                </Table>
             </div>

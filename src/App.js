@@ -34,7 +34,7 @@ function App() {
         </Route>
 
 
-        <Route element={<PrivateRoute allowedRoles={["EXPERT"]} />}>
+        <Route element={<PrivateRoute allowedRoles={["EXPERT", "ADMIN"]} />}>
           {
             expertRoutes.map((route) => {
               return <Route path={route.path} element={<route.component />} />
@@ -43,7 +43,7 @@ function App() {
         </Route>
 
 
-        <Route element={<PrivateRoute allowedRoles={["STAFF"]} />}>
+        <Route element={<PrivateRoute allowedRoles={["STAFF", "ADMIN"]} />}>
           {
             staffRoutes.map((route) => {
               return <Route path={route.path} element={<route.component />} />

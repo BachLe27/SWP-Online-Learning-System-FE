@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Accordion, Button, Badge } from 'react-bootstrap'
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import Loading from '../../../components/Loading';
+import ToastNoti from '../../../components/ToastNoti';
 import sortByDate from '../../../libs/sortByDate';
 import expertApi from '../../../_actions/expertApi';
 import { toastAtom } from '../../../_state';
@@ -11,20 +12,22 @@ import DeleteChapterModal from './DeleteChapterModal';
 import DeleteLessonModal from './DeleteLessonModal';
 import EditChapterModal from './EditChapterModal';
 import EditLessonModal from './EditLessonModal';
+import EditQuizModal from './EditQuizModal';
 
 
 const Chapter = ({ eventKey, chapter }) => {
-   const toast = useRecoilState(toastAtom);
+   const toast = useRecoilValue(toastAtom);
 
    // console.log(chapter.id);
-   const [lessons, setLessons] = useState([]);
+   const [lessons, setLessons] = useState();
 
    const loadLesson = async () => {
       try {
+         // setLessons();
          let lessonData = await (await expertApi.getLesson(chapter.id)).data;
          lessonData = sortByDate(lessonData);
-
          setLessons(lessonData);
+
       } catch (error) {
          console.log(error);
       }
@@ -32,11 +35,11 @@ const Chapter = ({ eventKey, chapter }) => {
 
    useEffect(() => {
       loadLesson();
-   }, [toast])
+   }, [])
 
    useEffect(() => {
       loadLesson();
-   }, []);
+   }, [toast])
 
    return (
       <div className="d-flex align-items-center">
@@ -63,10 +66,10 @@ const Chapter = ({ eventKey, chapter }) => {
                                     </td>
 
                                     <td>
-                                       <EditLessonModal lesson={lesson} />
+                                       {lesson.has_quiz ? <EditQuizModal key={index} lesson={lesson} /> : <EditLessonModal lesson={lesson} />}
                                     </td>
                                     <td>
-                                       <DeleteLessonModal lessonId={lesson.id} />
+                                       <DeleteLessonModal key={index} lessonId={lesson.id} />
                                     </td>
                                  </tr>
                               </>
@@ -89,6 +92,7 @@ const Chapter = ({ eventKey, chapter }) => {
             <EditChapterModal chapterId={chapter.id} />
             <DeleteChapterModal chapterId={chapter.id} />
          </div>
+         <ToastNoti />
       </div>
    )
 }

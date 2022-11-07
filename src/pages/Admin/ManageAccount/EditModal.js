@@ -36,10 +36,10 @@ const EditModal = ({ user }) => {
 
    return (
       <div className="modal fade" id={`edit-${user.username}`} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-         <div className="modal-dialog">
+         <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
                <div className="modal-header">
-                  <h1 className="modal-title fs-5" id="exampleModalLabel">User: <span className='fw-bold'>{user.username}</span> </h1>
+                  <h1 className="modal-title fs-5" id="exampleModalLabel"> <span className='fw-bold'>User: </span> <span className='fw-bold'>{user.username}</span> </h1>
                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                </div>
                <div className="modal-body">
@@ -54,7 +54,7 @@ const EditModal = ({ user }) => {
                </div>
                <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button form={`form-${user.username}`} type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+                  <button form={`form-${user.username}`} type="submit" className="btn btn-warning px-3 rounded-2 shadow fw-bold" data-bs-dismiss="modal">Update</button>
                </div>
             </div>
          </div>
