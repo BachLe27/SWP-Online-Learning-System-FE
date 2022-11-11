@@ -111,7 +111,7 @@ const Navbar = () => {
                         <ul className="pt-2 px-3 dropdown-menu dropdown-menu-end shadow" aria-labelledby="userOption">
                            <li>
                               <div className="dropdown-header d-flex align-items-center">
-                                 <img className="rounded-circle" width="50px" height="50px" src={user.avatar ? `http://localhost:8000/upload/${user.avatar}` : "https://picsum.photos/50/50"} alt="" />
+                                 <img className="rounded-circle" width="50px" height="50px" src={user.avatar ? `http://localhost:8000/upload/${user.avatar}` : `https://picsum.photos/50/50`} alt="" />
                                  <span className="fw-bold dropdown-header">{user.full_name}</span>
                               </div>
                            </li>

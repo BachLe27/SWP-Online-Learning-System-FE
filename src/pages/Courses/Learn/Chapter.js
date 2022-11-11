@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { Accordion, Badge, Nav } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import sortByDate from '../../../libs/sortByDate';
 import expertApi from '../../../_actions/expertApi';
+import { authAtom } from '../../../_state';
 
 const Chapter = ({ num, chapter, courseId }) => {
 
    const [lessons, setLessons] = useState();
+   const token = useRecoilValue(authAtom);
    const param = useParams();
 
    const loadLesson = async () => {
       try {
-         let lessonData = await (await expertApi.getLesson(chapter.id)).data;
+         let lessonData = await (await expertApi.getLesson(token, chapter.id)).data;
          lessonData = sortByDate(lessonData);
          setLessons(lessonData);
-         console.log(chapter.id, lessonData);
+         // console.log(chapter.id, lessonData);
       } catch (error) {
          console.log(error);
       }

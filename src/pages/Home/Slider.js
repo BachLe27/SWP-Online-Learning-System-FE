@@ -20,10 +20,10 @@ const Slider = () => {
                src={slider1}
                alt="First slide"
             />
-            <Carousel.Caption>
+            {/* <Carousel.Caption>
                <h3 className='fw-bold text-white fs-2'>First slide label</h3>
                <p className='fw-bold text-white'>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-            </Carousel.Caption>
+            </Carousel.Caption> */}
          </Carousel.Item>
          <Carousel.Item>
             <img
@@ -46,12 +46,12 @@ const Slider = () => {
                alt="Third slide"
             />
 
-            <Carousel.Caption>
+            {/* <Carousel.Caption>
                <h3 className='fw-bold text-white fs-2'>Third slide label</h3>
                <p className='fw-bold text-white'>
                   Praesent commodo cursus magna, vel scelerisque nisl consectetur.
                </p>
-            </Carousel.Caption>
+            </Carousel.Caption> */}
          </Carousel.Item>
       </Carousel>
    );

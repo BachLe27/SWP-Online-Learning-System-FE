@@ -14,6 +14,15 @@ const userApi = {
       return axios(config);
    },
 
+   purchased(token) {
+      const config = {
+         method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
+         url: '/price_package/purchased',
+      }
+      return axios(config);
+   },
+
    login(formData) {
       const config = {
          method: 'POST',

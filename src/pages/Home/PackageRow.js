@@ -13,7 +13,6 @@ const PackageRow = () => {
 
          packageData = packageData.filter(item => item.is_active == true);
          packageData.slice(0, 3);
-
          packageData = packageData.sort((a, b) => {
             return a.price - b.price;
          });

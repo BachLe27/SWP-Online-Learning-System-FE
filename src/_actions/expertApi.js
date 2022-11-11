@@ -108,17 +108,19 @@ const expertApi = {
       return axios(config);
    },
 
-   getLesson(id) {
+   getLesson(token, id) {
       const config = {
          method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
          url: `/chapter/${id}/lesson`
       }
       return axios(config);
    },
 
-   getLessonById(id) {
+   getLessonById(token, id) {
       const config = {
          method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}`, 'Content-Type': 'application/json' },
          url: `/lesson/${id}`
       }
       return axios(config);
@@ -169,6 +171,15 @@ const expertApi = {
          method: 'GET',
          headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
          url: `/lesson/${id}/quiz`
+      }
+      return axios(config);
+   },
+
+   getQuizResult(token, id) {
+      const config = {
+         method: 'GET',
+         headers: { 'Authorization': `${token.token_type} ${token.access_token}` },
+         url: `/lesson/${id}/quiz/submission`
       }
       return axios(config);
    }

@@ -3,7 +3,7 @@ import { Button, Modal } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import userApi from '../../../_actions/userApi';
-import { authAtom, toastAtom } from '../../../_state';
+import { authAtom, toastAtom, userAtom } from '../../../_state';
 
 const EnrollButton = ({ courseId }) => {
 
@@ -13,25 +13,42 @@ const EnrollButton = ({ courseId }) => {
    const [isSubmitting, setIsSubmitting] = useState(false);
    const navigate = useNavigate();
 
+   const user = useRecoilValue(userAtom);
+
    const onHide = () => {
       setModalShow(false);
    }
 
    const onSubmit = async () => {
+
+
       if (!token) {
          navigate('/login');
       }
       try {
-         setIsSubmitting(true);
-         const enroll = await (await userApi.enrollCourse(token, courseId)).data;
-         console.log(enroll);
-         setModalShow(false);
-         setIsSubmitting(false);
-         setToast({
-            show: true,
-            status: 'primary',
-            msg: 'Enrol success'
-         })
+         let purchased = (await userApi.purchased(token)).data;
+         // console.log(purchased);
+         let x = [];
+         purchased.forEach(bill => {
+            if (user.id == bill.user_id) {
+               x.push(bill);
+            }
+         });
+
+         if (!(x.length > 0)) {
+            navigate("/purchase");
+         } else {
+            setIsSubmitting(true);
+            const enroll = await (await userApi.enrollCourse(token, courseId)).data;
+
+            setModalShow(false);
+            setIsSubmitting(false);
+            setToast({
+               show: true,
+               status: 'primary',
+               msg: 'Enrol success'
+            })
+         }
       } catch (error) {
          console.log(error);
       }

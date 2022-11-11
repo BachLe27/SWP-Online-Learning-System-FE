@@ -5,7 +5,7 @@ import Loading from '../../../components/Loading';
 import ToastNoti from '../../../components/ToastNoti';
 import sortByDate from '../../../libs/sortByDate';
 import expertApi from '../../../_actions/expertApi';
-import { toastAtom } from '../../../_state';
+import { authAtom, toastAtom } from '../../../_state';
 import AddLessonModal from './AddLessonModal';
 import AddQuizModal from './AddQuizModal';
 import DeleteChapterModal from './DeleteChapterModal';
@@ -17,14 +17,14 @@ import EditQuizModal from './EditQuizModal';
 
 const Chapter = ({ eventKey, chapter }) => {
    const toast = useRecoilValue(toastAtom);
-
+   const token = useRecoilValue(authAtom);
    // console.log(chapter.id);
    const [lessons, setLessons] = useState();
 
    const loadLesson = async () => {
       try {
          // setLessons();
-         let lessonData = await (await expertApi.getLesson(chapter.id)).data;
+         let lessonData = await (await expertApi.getLesson(token, chapter.id)).data;
          lessonData = sortByDate(lessonData);
          setLessons(lessonData);
 

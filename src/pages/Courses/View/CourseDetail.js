@@ -35,10 +35,11 @@ const CourseDetail = () => {
          chaptersData = sortByDate(chaptersData);
 
          const overviewData = await userApi.getCourseOverView(id);
-         const enrolled = await (await userApi.getEnrolledCourse(token)).data;
-         const x = enrolled.find(item => item.id == id);
-         if (x) setIsEnrolled(true);
-
+         if (token) {
+            const enrolled = await (await userApi.getEnrolledCourse(token)).data;
+            const x = enrolled.find(item => item.id == id);
+            if (x) setIsEnrolled(true);
+         }
          setOverview(overviewData.data);
          setChapters(chaptersData);
          setCourse(courseData.data);

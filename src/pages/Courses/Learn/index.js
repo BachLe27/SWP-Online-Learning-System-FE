@@ -10,19 +10,22 @@ import Loading from '../../../components/Loading'
 import ReactMarkdown from 'react-markdown'
 import QuizOverview from './QuizOverview'
 import getEmbedURL from '../../../libs/getEmbedURL'
+import expertApi from '../../../_actions/expertApi'
+import { useRecoilValue } from 'recoil'
+import { authAtom } from '../../../_state'
 
 const Learn = () => {
    const param = useParams();
    const [chapters, setChapters] = useState();
    const [lesson, setLesson] = useState();
-
+   const token = useRecoilValue(authAtom);
    const loadChapters = async () => {
       try {
          const id = param.courseId;
          let chaptersData = await (await userApi.getChapters(id)).data;
          chaptersData = sortByDate(chaptersData);
          setChapters(chaptersData);
-         console.log(chaptersData);
+         // console.log(chaptersData);
       } catch (error) {
          console.log(error);
       }
@@ -31,7 +34,7 @@ const Learn = () => {
    const loadLesson = async () => {
       try {
          const id = param.lessonId;
-         let lessonData = await (await userApi.getLesson(id)).data;
+         let lessonData = await (await expertApi.getLessonById(token, id)).data;
          setLesson(lessonData);
          // console.log(lessonData);
       } catch (error) {

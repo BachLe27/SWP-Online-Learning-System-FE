@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import Footer from '../../components/Footer'
 import Loading from '../../components/Loading'
 import Navbar from '../../components/Navbar'
 import userApi from '../../_actions/userApi'
+import { authAtom } from '../../_state'
 import Package from './Package'
 
 const Purchase = () => {
 
    const [packages, setPackages] = useState();
+   const token = useRecoilValue(authAtom);
 
    const loadPackage = async () => {
       try {
          let packageData = await (await userApi.getPackages()).data;
-
+         let purchased = (await userApi.purchased(token)).data;
+         console.log(purchased);
          packageData = packageData.filter(item => item.is_active == true);
          packageData = packageData.sort((a, b) => {
             return a.price - b.price;
